@@ -1,0 +1,22 @@
+figure_id: F1.1
+title: First-order landscape of computational difficulty
+chapter: C01-C05 orientation
+status: candidate
+pedagogical_question: How can the classical containment spine be introduced without implying a scalar hardness ordering?
+misconceptions:
+  - M02
+  - M03
+  - M05
+  - M09
+  - M10
+  - M15
+source: figures/src/F1_1_first_order_landscape.wl
+outputs:
+  - figures/generated/F1_1_first_order_landscape.svg
+  - figures/generated/F1_1_first_order_landscape.pdf
+generator: Wolfram Language
+review_required:
+  - mathematical
+  - pedagogical
+  - typography
+  - accessibility
