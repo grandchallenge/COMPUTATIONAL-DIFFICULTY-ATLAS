@@ -1,6 +1,6 @@
 # F1.1 — First-order landscape of computational difficulty
 
-Status: candidate source established; publication review pending  
+Status: candidate source revised for readability; publication review pending
 Source: `figures/src/F1_1_first_order_landscape.wl`
 
 ## Pedagogical question
@@ -9,7 +9,7 @@ How can we show the first classical containment spine without teaching the false
 
 ## Caption
 
-**Figure F1.1 — A first-order containment map, not a total ordering of difficulty.**  
+**Figure F1.1 — A first-order containment map, not a total ordering of difficulty.**
 For decision problems over finite encodings, $P \subseteq NP \subseteq PSPACE \subsetneq \mathrm{DECIDABLE}$. The containments $P \subseteq NP$ and $NP \subseteq PSPACE$ are proved, but whether either is strict remains open. The strict inclusion $PSPACE \subsetneq \mathrm{DECIDABLE}$ follows because decidable languages exist that require more than polynomial space. The horizontal computability boundary separates problems for which some total algorithm exists from undecidable problems; it is not merely another step on a runtime scale. "NP-hard" is intentionally shown as a reduction-based warning rather than a horizontal region. Integer factorization is also intentionally not assigned an NP-completeness position: its precise classification depends on formulation and computational model, and it is not known to be NP-complete.
 
 ## Misconceptions addressed
@@ -27,6 +27,16 @@ This first-order map does not yet display:
 
 Those are later map updates, not absent claims.
 
+## Readability revision
+
+The revised candidate uses a 720 pt nominal vector width with deliberately enlarged typography:
+- principal labels: 20–26 pt;
+- explanatory text: 18 pt;
+- relation/status labels: 16 pt;
+- sidebar text: 16–19 pt.
+
+Long in-box prose was shortened rather than shrunk. Relation labels now occupy clear whitespace with no connector stroke behind them. All boxed text has visible interior clearance and no label crosses or touches a boundary.
+
 ## Acceptance checklist
 
 - [x] no vertical "harder problems" axis;
@@ -37,6 +47,9 @@ Those are later map updates, not absent claims.
 - [x] factorization not mislabeled NP-complete;
 - [x] Wolfram Language source is reproducible;
 - [x] SVG/PDF export targets are defined;
+- [x] essential text enlarged for page-width reading;
+- [x] no text crosses or touches box boundaries;
+- [x] no structural line runs through a relation label;
 - [ ] independent mathematical review;
-- [ ] typography review at final page width;
+- [ ] typography review at final manuscript placement;
 - [ ] grayscale/print proof;

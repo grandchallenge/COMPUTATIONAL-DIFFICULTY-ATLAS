@@ -78,20 +78,30 @@ Typical examples:
 
 The decision is based on what best teaches the concept, not on tool loyalty.
 
-## 7. Figure-level acceptance test
+## 7. Wolfram typography and box geometry
+
+The normative typography, density, padding, and collision rules for Wolfram figures are defined in [WOLFRAM_FIGURE_TYPOGRAPHY.md](WOLFRAM_FIGURE_TYPOGRAPHY.md).
+
+In particular: essential text must remain readable at intended manuscript width without zoom; boxes are sized to text rather than text being shrunk to boxes; and no label, symbol, or annotation may cross, touch, or visually compete with a boundary or structural line.
+
+## 8. Figure-level acceptance test
 
 A production figure should pass all of the following:
 
 1. **First glance:** the principal structure is perceptible within a few seconds.
 2. **Exact reading:** labels and notation are correct at normal page size.
-3. **Claim discipline:** the figure does not imply mathematical relations stronger than the text supports.
-4. **Legend sufficiency:** all nonstandard encodings are explained.
-5. **Accessibility:** meaning survives grayscale and is not dependent on color alone.
-6. **Scale robustness:** the figure remains legible in print and on ordinary screens.
-7. **Caption independence:** the caption states what the figure establishes and what it does not establish.
-8. **Reproducibility:** source sufficient to regenerate the figure is version-controlled.
+3. **Readability:** essential text is comfortably readable at intended manuscript width without zoom.
+4. **Containment fit:** no text crosses, touches, or visually competes with box lines, connectors, axes, or panel boundaries.
+5. **Claim discipline:** the figure does not imply mathematical relations stronger than the text supports.
+6. **Legend sufficiency:** all nonstandard encodings are explained.
+7. **Accessibility:** meaning survives grayscale and is not dependent on color alone.
+8. **Scale robustness:** the figure remains legible in print and on ordinary screens.
+9. **Caption independence:** the caption states what the figure establishes and what it does not establish.
+10. **Reproducibility:** source sufficient to regenerate the figure is version-controlled.
 
-## 8. Progressive-map doctrine
+A figure should be inspected at its intended manuscript width, not only as a large standalone export.
+
+## 9. Progressive-map doctrine
 
 The monograph will not rely on a single master diagram of computational difficulty.
 
@@ -107,7 +117,7 @@ Instead, figures will progressively distinguish:
 
 Early figures may intentionally simplify the landscape, but every simplification must be declared and later repaired as the reader acquires the concepts needed for the more faithful map.
 
-## 9. Prototype versus publication figure
+## 10. Prototype versus publication figure
 
 Concept sketches, generated mock-ups, screenshots, and exploratory renderings may be used during development.
 
@@ -115,7 +125,7 @@ They are not publication figures unless they satisfy this specification.
 
 The corrected computational-landscape image that initiated this monograph is therefore treated as a conceptual prototype. Its publication successor must be regenerated under this specification.
 
-## 10. Source discipline
+## 11. Source discipline
 
 Each figure should have, where applicable:
 
@@ -128,7 +138,7 @@ Each figure should have, where applicable:
 - provenance and version information;
 - a short note explaining the pedagogical purpose of the figure.
 
-## 11. Precedence rule
+## 12. Precedence rule
 
 When production preferences conflict, apply:
 

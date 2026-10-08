@@ -15,8 +15,19 @@ outputs:
   - figures/generated/F1_1_first_order_landscape.svg
   - figures/generated/F1_1_first_order_landscape.pdf
 generator: Wolfram Language
+nominal_vector_width_pt: 720
+typography_profile:
+  principal_labels_pt: "20-26"
+  explanatory_text_pt: 18
+  relation_status_pt: 16
+  sidebar_text_pt: "16-19"
+geometry_requirements:
+  text_boundary_crossing: forbidden
+  text_boundary_touching: forbidden
+  connector_through_label: forbidden
+  visible_internal_padding: required
 review_required:
   - mathematical
   - pedagogical
-  - typography
+  - typography_at_final_width
   - accessibility
