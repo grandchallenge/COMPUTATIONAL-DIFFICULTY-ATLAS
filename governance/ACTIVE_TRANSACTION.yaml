@@ -10,7 +10,7 @@ baseline:
 
 candidate:
   branch: architecture/v0.1-pedagogical-foundations
-  commit: d5c6e8946e1fac2b6733bdd3eb0edb228d662386
+  commit: 238d69297afc462f118653a991da6b1bec397d40
   pull_request: 1
 
 review_gate:
@@ -33,6 +33,7 @@ completed_in_candidate:
   - Wolfram source for F1.1
   - Wolfram-rendered SVG candidate for F1.1
   - F1.1 caption and provenance metadata
+  - Wolfram larger-type and collision-free geometry amendment
 
 next_action:
   - receive a conforming RESULT/1 on issue 2

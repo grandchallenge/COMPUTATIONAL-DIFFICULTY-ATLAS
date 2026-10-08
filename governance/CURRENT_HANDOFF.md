@@ -5,9 +5,9 @@ State: **WAITING_EXTERNAL_REVIEW**
 
 The first architecture tranche for *A Mathematical Atlas of Computational Difficulty* is instantiated in PR #1 at candidate head:
 
-`d5c6e8946e1fac2b6733bdd3eb0edb228d662386`
+`238d69297afc462f118653a991da6b1bec397d40`
 
-The candidate contains the pedagogical architecture, misconception controls, six keystone chapter specifications, and the first Wolfram-produced publication-candidate figure F1.1.
+The candidate contains the pedagogical architecture, misconception controls, six keystone chapter specifications, and the revised Wolfram-produced F1.1 candidate with larger typography and collision-free box geometry.
 
 Independent review job **CDA-REV-001** is issue #2. It has been added to GCL Worker Queue Project #2 and marked with the direct-review discovery labels:
 
