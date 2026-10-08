@@ -51,8 +51,8 @@ Misconception prevented: "a problem has one complexity label independent of form
 **Primary lesson:** "not known in P" does not imply NP-complete; computational model matters.
 
 Trajectory:
-- C03/C04: classical status and verification.
-- C07: relation to NP and coNP-style evidence for associated decision problems.
+- C03/C04: distinguish the factorization function/search task from associated decision formulations; discuss efficient verification without implying NP-completeness.
+- C07: use an explicitly stated decision formulation when discussing NP/coNP-style certificate structure.
 - C08: example of a famous problem not known NP-complete.
 - C15: Shor's algorithm and BQP.
 - C23: contrast between classical and quantum resource maps.

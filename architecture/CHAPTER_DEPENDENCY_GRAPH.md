@@ -79,7 +79,7 @@ C21 Reductions beyond decidability
 C22 Arithmetical hierarchy and degrees of unsolvability
 ```
 
-This branch deliberately begins after the reader has already seen resource-bounded complexity, so the change from "expensive" to "not computable at all" is explicit.
+This branch deliberately begins after the reader has already seen resource-bounded complexity, so the change from "expensive" to "not computable at all" is explicit. In addition to C01, C20 has pedagogical prerequisites C03 (efficient computation) and C04 (NP / verification) so that the contrast with decidable resource-bounded problems is not imported silently.
 
 ## Synthesis
 

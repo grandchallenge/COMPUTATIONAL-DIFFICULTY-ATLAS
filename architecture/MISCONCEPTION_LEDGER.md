@@ -14,7 +14,7 @@ Each misconception is a defect class the monograph is required to prevent or exp
 | M06 | Quantum computers efficiently solve NP-complete problems in general. | BQP is not known to contain NP-complete problems; Shor targets factoring/discrete log structure. | C15 |
 | M07 | P means easy in practice. | Polynomial asymptotics are a robustness notion, not a runtime guarantee. | C03 |
 | M08 | Exponential means impossible for every instance size. | Complexity is asymptotic and worst-case unless otherwise stated. | C02 |
-| M09 | Undecidable means extremely expensive. | No total algorithm exists for all instances. | C20 |
+| M09 | Undecidable means extremely expensive. | An undecidable decision problem has no total decider that halts with the correct yes/no answer on every instance. | C20 |
 | M10 | If A is contained in B, every problem in B is harder than every problem in A. | Class containment is set inclusion, not total ordering of individual problems. | C03-C05 |
 | M11 | A reduction A -> B proves A is harder than B. | It shows B is at least as hard as A under the specified reduction notion. | C05 |
 | M12 | Chess and Go each have one unqualified complexity classification. | Classification depends on generalized formulation and rule set. | C11-C12 |

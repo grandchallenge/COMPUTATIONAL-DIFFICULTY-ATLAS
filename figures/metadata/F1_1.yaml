@@ -11,16 +11,17 @@ misconceptions:
   - M10
   - M15
 source: figures/src/F1_1_first_order_landscape.wl
-outputs:
+publication_export_targets:
   - figures/generated/F1_1_first_order_landscape.svg
   - figures/generated/F1_1_first_order_landscape.pdf
+review_preview: figures/generated/F1_1_first_order_landscape.png
 generator: Wolfram Language
-nominal_vector_width_pt: 720
+nominal_vector_width_pt: 800
 typography_profile:
   principal_labels_pt: "20-26"
-  explanatory_text_pt: 18
+  explanatory_text_pt: "15-18"
   relation_status_pt: 16
-  sidebar_text_pt: "16-19"
+  sidebar_text_pt: "15-19"
 geometry_requirements:
   text_boundary_crossing: forbidden
   text_boundary_touching: forbidden
