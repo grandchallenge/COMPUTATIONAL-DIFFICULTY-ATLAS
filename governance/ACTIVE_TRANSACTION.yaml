@@ -10,7 +10,7 @@ baseline:
 
 candidate:
   branch: architecture/v0.1-pedagogical-foundations
-  commit: 238d69297afc462f118653a991da6b1bec397d40
+  commit: c75d3aeb6ed1ceb4eb57224f025347729aeb627b
   pull_request: 1
 
 review_gate:
@@ -31,9 +31,11 @@ completed_in_candidate:
   - chapter specification template
   - six keystone chapter specifications
   - Wolfram source for F1.1
-  - Wolfram-rendered SVG candidate for F1.1
+  - Wolfram-rendered PNG review preview for F1.1
+  - SVG/PDF publication export targets retained in Wolfram source
   - F1.1 caption and provenance metadata
   - Wolfram larger-type and collision-free geometry amendment
+  - internal preflight tightening of NP, factorization, computability, quantum, and C20 dependency formulations
 
 next_action:
   - receive a conforming RESULT/1 on issue 2
