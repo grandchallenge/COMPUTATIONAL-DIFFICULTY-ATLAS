@@ -13,13 +13,14 @@ completion:
   architecture_pull_request: 1
   direct_return_projector_pull_request: 3
   direct_return_projector_main_commit: aaa4e2b9e19641fbbb14e35f6489c92a65256c38
+  validation_followup_pull_request: 4
 
 review_gate:
   issue: 2
   assignment_id: CDA-REV-001
   worker_queue_project: https://github.com/orgs/grandchallenge/projects/2
   final_projection: CLOSED
-  reviewed_head: c75d3aeb6ed1ceb4b6733bdd3eb0edb228d662386
+  reviewed_head: c75d3aeb6ed1ceb4eb57224f025347729aeb627b
   result_comment_id: 6072199152
   disposition: APPROVE_WITH_CORRECTIONS
   corrections_adjudicated: true
