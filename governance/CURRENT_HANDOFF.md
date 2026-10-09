@@ -1,37 +1,48 @@
 # Current Handoff
 
 Transaction: `CDA-ARCH-V0.1-FOUNDATIONS-001`  
-State: **READY_FOR_MERGE**
+State: **COMPLETED**
 
-PR #1 is at exact candidate head:
+The first architecture tranche for *A Mathematical Atlas of Computational Difficulty* is accepted on `main` at:
 
-`a5435306250df0db45907cb0629ffbe58ad0b0b9`
+`322fd653b551ccc93df8fc4339b463d82b9c69a4`
 
-The independent review job **CDA-REV-001** returned a conforming `RESULT/1` on issue #2 against exact reviewed head:
+PR #1 merged the pedagogical architecture, six keystone specifications, misconception and claim-status controls, the Wolfram F1.1 candidate, and the adjudicated CDA-REV-001 corrections.
+
+## Review closure
+
+CDA-REV-001 returned on issue #2 against exact head:
 
 `c75d3aeb6ed1ceb4b6733bdd3eb0edb228d662386`
 
 Disposition: **APPROVE_WITH_CORRECTIONS**.
 
-The review verified the core mathematical containment claims, formulation discipline, pedagogical DAG, anchor trajectories, misconception controls, and F1.1 rendered typography/geometry. Its three requested follow-ups were adjudicated:
+The corrections were admitted and recorded in `reviews/CDA_REV_001_ADJUDICATION.md`. They were limited to the reviewer's requested C15 dependency clarification and review-evidence bookkeeping; no reviewed mathematical claim or Wolfram figure source changed. Issue #2 is operationally closed with `GCL State=CLOSED`.
 
-1. C15 now explicitly depends on C01's formulation distinction in addition to C04/C05.
-2. F1.1 caption and metadata now bind the independent review evidence.
-3. SVG/PDF publication export regeneration remains an explicit pre-release check.
+## Worker Queue closure
 
-The durable adjudication record is `reviews/CDA_REV_001_ADJUDICATION.md`.
+The queue defect that delayed this review has been repaired systemically:
 
-No second exact-head review is required for these changes because they are exactly the review-requested dependency clarification and review-evidence bookkeeping. No mathematical claim, Wolfram source, rendered figure geometry, theorem payload, or formulation changed. Any future substantive change to reviewed content reopens the exact-head review requirement.
+- MATHSOLVE PR #1017 is merged and the canonical worker bootstrap is now pickup-mode aware.
+- Project #2 has explicit reservation-controlled versus direct-editorial semantics.
+- MATHSOLVE controller transitions reproject immutable job metadata.
+- The full cross-repository queue audit is fail-closed and reconciles Project Status with exact bound IDs.
+- CDA PR #3 is merged at `aaa4e2b9e19641fbbb14e35f6489c92a65256c38`; future exact-head direct-review `RESULT/1` returns are projected locally to RETURNED without relying on the MATHSOLVE reservation controller.
 
-The Worker Queue return has been projected to `GCL State=RETURNED`, and the Project Status readback has been reconciled. CDA's repository-local direct-return projector is now on `main` via PR #3 for future direct-review jobs.
+The returned review itself exercised the repaired path end to end.
+
+## Remaining figure release checks
+
+F1.1 is independently reviewed as a candidate. Publication still requires:
+
+1. regeneration of SVG/PDF from the canonical Wolfram source;
+2. typography inspection at final manuscript placement;
+3. grayscale/print proof.
+
+These are release checks, not blockers on the accepted architecture.
 
 ## Recovery rule
 
-1. confirm PR #1 still points to `a5435306250df0db45907cb0629ffbe58ad0b0b9`;
-2. merge PR #1 only if GitHub reports it mergeable against current main;
-3. read back the accepted architecture, F1.1 metadata/caption, and review adjudication on `main`;
-4. operationally close CDA-REV-001;
-5. update `ACTIVE_TRANSACTION.yaml` to COMPLETED;
-6. open the next bounded architecture/composition transaction.
+This transaction is closed. Do not reconstruct or reopen it from chat.
 
-There is no Human-Steward action required at this boundary.
+The next transaction, when opened, should continue chapter specifications and composition from main commit `322fd653b551ccc93df8fc4339b463d82b9c69a4`.
