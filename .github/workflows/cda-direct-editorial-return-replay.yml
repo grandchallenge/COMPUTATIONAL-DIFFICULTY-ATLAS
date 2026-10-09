@@ -1,0 +1,101 @@
+name: CDA direct editorial return replay
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: cda-direct-return-replay
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: false
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12.13"
+
+      - name: Replay missed direct-editorial RESULT/1 returns
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          repaired=0
+
+          gh api --paginate \
+            "repos/$GITHUB_REPOSITORY/issues?state=open&labels=gcl-pickup%3Adirect-editorial&per_page=100" \
+            --jq '.[] | select(.pull_request == null) | .number' \
+            > "$RUNNER_TEMP/issues.txt"
+
+          while IFS= read -r issue_number; do
+            [ -n "$issue_number" ] || continue
+
+            issue_json="$RUNNER_TEMP/issue-$issue_number.json"
+            fields_json="$RUNNER_TEMP/fields-$issue_number.json"
+            comment_pages="$RUNNER_TEMP/comment-pages-$issue_number.json"
+            comments_json="$RUNNER_TEMP/comments-$issue_number.json"
+            projection_json="$RUNNER_TEMP/projection-$issue_number.json"
+
+            gh api "repos/$GITHUB_REPOSITORY/issues/$issue_number" > "$issue_json"
+            gh api "repos/$GITHUB_REPOSITORY/issues/$issue_number/issue-field-values" > "$fields_json"
+            gh api --paginate --slurp \
+              "repos/$GITHUB_REPOSITORY/issues/$issue_number/comments?per_page=100" \
+              > "$comment_pages"
+            jq 'add // []' "$comment_pages" > "$comments_json"
+
+            python ci/cda_direct_return_reconcile.py \
+              --issue "$issue_json" \
+              --issue-fields "$fields_json" \
+              --comments "$comments_json" \
+              --output "$projection_json"
+
+            if [ "$(jq -r '.project' "$projection_json")" != true ]; then
+              continue
+            fi
+
+            comment_id="$(jq -r '.comment_id' "$projection_json")"
+            echo "Replaying issue #$issue_number from RESULT/1 comment $comment_id"
+
+            printf '%s\n' '{"issue_field_values":[{"field_id":47953501,"value":"RETURNED"}]}' \
+              > "$RUNNER_TEMP/state-update.json"
+            gh api --method POST \
+              "repos/$GITHUB_REPOSITORY/issues/$issue_number/issue-field-values" \
+              --input "$RUNNER_TEMP/state-update.json" > /dev/null
+
+            gh label create "gcl-state:returned" --repo "$GITHUB_REPOSITORY" \
+              --color "6f42c1" --description "Direct worker result returned; not yet adjudicated" \
+              --force > /dev/null
+            gh issue edit "$issue_number" --repo "$GITHUB_REPOSITORY" \
+              --add-label "gcl-state:returned" > /dev/null
+            gh issue edit "$issue_number" --repo "$GITHUB_REPOSITORY" \
+              --remove-label "gcl-state:available" > /dev/null 2>&1 || true
+
+            gh api "repos/$GITHUB_REPOSITORY/issues/$issue_number/issue-field-values" \
+              > "$RUNNER_TEMP/readback-fields.json"
+            jq -e 'any(.[]; .issue_field_name=="GCL State" and .single_select_option.name=="RETURNED")' \
+              "$RUNNER_TEMP/readback-fields.json" > /dev/null
+
+            gh issue view "$issue_number" --repo "$GITHUB_REPOSITORY" --json labels \
+              > "$RUNNER_TEMP/readback-issue.json"
+            jq -e '
+              ([.labels[].name] | index("gcl-state:returned")) != null and
+              ([.labels[].name] | index("gcl-state:available")) == null
+            ' "$RUNNER_TEMP/readback-issue.json" > /dev/null
+
+            repaired=$((repaired + 1))
+          done < "$RUNNER_TEMP/issues.txt"
+
+          echo "replayed_returns=$repaired" >> "$GITHUB_STEP_SUMMARY"

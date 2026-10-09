@@ -37,7 +37,8 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: "3.12.13"
-      - name: Test direct-return projector
-        run: python -m unittest tests.test_cda_direct_return_projector -v
+      - name: Test direct-return projector and replay watchdog
+        run: |
+          python -m unittest tests.test_cda_direct_return_projector tests.test_cda_direct_return_reconcile -v
       - name: Validate adjudicated review provenance
         run: python ci/validate_review_provenance.py
