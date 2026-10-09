@@ -14,6 +14,7 @@ completion:
   direct_return_projector_pull_request: 3
   direct_return_projector_main_commit: aaa4e2b9e19641fbbb14e35f6489c92a65256c38
   validation_followup_pull_request: 4
+  validation_followup_main_commit: cc509d4ab5b8d834f61ed44f012743fa53272bd7
 
 review_gate:
   issue: 2
