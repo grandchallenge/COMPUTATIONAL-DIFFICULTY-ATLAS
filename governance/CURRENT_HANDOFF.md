@@ -19,7 +19,7 @@ Disposition: **APPROVE_WITH_CORRECTIONS**.
 
 The corrections were admitted and recorded in `reviews/CDA_REV_001_ADJUDICATION.md`. They were limited to the reviewer's requested C15 dependency clarification and review-evidence bookkeeping; no reviewed mathematical claim or Wolfram figure source changed. Issue #2 is operationally closed with `GCL State=CLOSED`.
 
-Post-closure validation found that two durable records had manually mistyped the reviewed SHA even though the issue return and F1.1 caption carried the correct value. PR #4 corrects those records and adds a canonical review receipt plus CI cross-check so this class of provenance drift fails closed.
+Post-closure validation found that two durable records had manually mistyped the reviewed SHA even though the issue return and F1.1 caption carried the correct value. PR #4 merged at `cc509d4ab5b8d834f61ed44f012743fa53272bd7`; it corrects those records and adds a canonical review receipt plus CI cross-check so this class of provenance drift fails closed.
 
 ## Worker Queue closure
 
