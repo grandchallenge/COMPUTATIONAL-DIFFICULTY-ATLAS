@@ -13,11 +13,13 @@ PR #1 merged the pedagogical architecture, six keystone specifications, misconce
 
 CDA-REV-001 returned on issue #2 against exact head:
 
-`c75d3aeb6ed1ceb4b6733bdd3eb0edb228d662386`
+`c75d3aeb6ed1ceb4eb57224f025347729aeb627b`
 
 Disposition: **APPROVE_WITH_CORRECTIONS**.
 
 The corrections were admitted and recorded in `reviews/CDA_REV_001_ADJUDICATION.md`. They were limited to the reviewer's requested C15 dependency clarification and review-evidence bookkeeping; no reviewed mathematical claim or Wolfram figure source changed. Issue #2 is operationally closed with `GCL State=CLOSED`.
+
+Post-closure validation found that two durable records had manually mistyped the reviewed SHA even though the issue return and F1.1 caption carried the correct value. PR #4 corrects those records and adds a canonical review receipt plus CI cross-check so this class of provenance drift fails closed.
 
 ## Worker Queue closure
 
