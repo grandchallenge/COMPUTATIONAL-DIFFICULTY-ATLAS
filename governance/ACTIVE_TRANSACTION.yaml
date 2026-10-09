@@ -1,16 +1,17 @@
 schema: GCL-CDA-ACTIVE-TRANSACTION/1
 project: COMPUTATIONAL-DIFFICULTY-ATLAS
 transaction_id: CDA-ARCH-V0.1-FOUNDATIONS-001
-state: WAITING_EXTERNAL_REVIEW
+state: READY_FOR_MERGE
 recovery_branch: state/cda-controller
 
 baseline:
   branch: main
-  commit: 108569427bcc88c42d7ec21ee9833c73c869c0c2
+  architecture_start_commit: 108569427bcc88c42d7ec21ee9833c73c869c0c2
+  current_integration_commit: aaa4e2b9e19641fbbb14e35f6489c92a65256c38
 
 candidate:
   branch: architecture/v0.1-pedagogical-foundations
-  commit: c75d3aeb6ed1ceb4eb57224f025347729aeb627b
+  commit: a5435306250df0db45907cb0629ffbe58ad0b0b9
   pull_request: 1
 
 review_gate:
@@ -18,8 +19,14 @@ review_gate:
   assignment_id: CDA-REV-001
   worker_queue_project: https://github.com/orgs/grandchallenge/projects/2
   required_return: RESULT/1
-  current_projection: AVAILABLE
+  current_projection: RETURNED
   exact_head_required: true
+  reviewed_head: c75d3aeb6ed1ceb4b6733bdd3eb0edb228d662386
+  result_comment_id: 6072199152
+  disposition: APPROVE_WITH_CORRECTIONS
+  corrections_adjudicated: true
+  rereview_required: false
+  adjudication_record: reviews/CDA_REV_001_ADJUDICATION.md
 
 completed_in_candidate:
   - pedagogical charter
@@ -35,15 +42,17 @@ completed_in_candidate:
   - SVG/PDF publication export targets retained in Wolfram source
   - F1.1 caption and provenance metadata
   - Wolfram larger-type and collision-free geometry amendment
-  - internal preflight tightening of NP, factorization, computability, quantum, and C20 dependency formulations
+  - internal hostile preflight
+  - independent exact-head mathematical/editorial review
+  - requested C15 prerequisite clarification
+  - review-evidence synchronization in F1.1 caption and metadata
 
 next_action:
-  - receive a conforming RESULT/1 on issue 2
-  - adjudicate every requested correction against the exact reviewed head
-  - amend candidate and rerender F1.1 if required
-  - repeat exact-head review if substantive reviewed material changes
-  - merge PR 1 only after review gate is satisfied
-  - read back main and close the transaction
+  - merge PR 1 at exact candidate head if GitHub still reports it mergeable
+  - read back accepted architecture and review record on main
+  - close review assignment operationally
+  - mark this transaction completed
+  - begin next bounded composition/specification transaction
 
-stop_reason: external independent review evidence has not yet returned
+stop_reason: none
 last_verified_date: 2026-10-08
