@@ -30,7 +30,7 @@ geometry_requirements:
 review_evidence:
   assignment_id: CDA-REV-001
   issue: 2
-  input_head: c75d3aeb6ed1ceb4b6733bdd3eb0edb228d662386
+  input_head: c75d3aeb6ed1ceb4eb57224f025347729aeb627b
   disposition: APPROVE_WITH_CORRECTIONS
   comment_id: 6072199152
 review_complete:

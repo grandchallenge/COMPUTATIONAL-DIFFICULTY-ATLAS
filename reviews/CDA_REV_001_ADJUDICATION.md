@@ -7,7 +7,7 @@ Status: corrections incorporated; architecture candidate may advance subject to 
 - assignment: `CDA-REV-001`
 - issue: #2
 - RESULT/1 comment: `6072199152`
-- reviewed input head: `c75d3aeb6ed1ceb4b6733bdd3eb0edb228d662386`
+- reviewed input head: `c75d3aeb6ed1ceb4eb57224f025347729aeb627b`
 - disposition: `APPROVE_WITH_CORRECTIONS`
 - reviewer role: `INDEPENDENT_MATHEMATICAL_EDITORIAL_VERIFY`
 

@@ -7,6 +7,10 @@ on:
       - "tests/**"
       - ".github/workflows/**"
       - "governance/DIRECT_EDITORIAL_RETURN_PROTOCOL.md"
+      - "reviews/CDA_REV_001_*.md"
+      - "reviews/CDA_REV_001_*.json"
+      - "figures/F1_1_CAPTION.md"
+      - "figures/metadata/F1_1.yaml"
   push:
     branches: [main]
     paths:
@@ -14,6 +18,10 @@ on:
       - "tests/**"
       - ".github/workflows/**"
       - "governance/DIRECT_EDITORIAL_RETURN_PROTOCOL.md"
+      - "reviews/CDA_REV_001_*.md"
+      - "reviews/CDA_REV_001_*.json"
+      - "figures/F1_1_CAPTION.md"
+      - "figures/metadata/F1_1.yaml"
 
 permissions:
   contents: read
@@ -31,3 +39,5 @@ jobs:
           python-version: "3.12.13"
       - name: Test direct-return projector
         run: python -m unittest tests.test_cda_direct_return_projector -v
+      - name: Validate adjudicated review provenance
+        run: python ci/validate_review_provenance.py

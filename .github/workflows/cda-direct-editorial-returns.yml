@@ -72,3 +72,10 @@ jobs:
             > "$RUNNER_TEMP/readback.json"
           jq -e 'any(.[]; .issue_field_name=="GCL State" and .single_select_option.name=="RETURNED")' \
             "$RUNNER_TEMP/readback.json" > /dev/null
+
+          gh issue view "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --json labels \
+            > "$RUNNER_TEMP/issue-readback.json"
+          jq -e '
+            ([.labels[].name] | index("gcl-state:returned")) != null and
+            ([.labels[].name] | index("gcl-state:available")) == null
+          ' "$RUNNER_TEMP/issue-readback.json" > /dev/null
