@@ -1,6 +1,6 @@
 # F1.1 — First-order landscape of computational difficulty
 
-Status: candidate source revised for readability; publication review pending
+Status: independently reviewed candidate; final production checks pending
 Source: `figures/src/F1_1_first_order_landscape.wl`
 
 ## Pedagogical question
@@ -52,6 +52,6 @@ Long in-box prose was shortened or deliberately wrapped rather than shrunk. Rela
 - [x] essential text enlarged for page-width reading;
 - [x] no text crosses or touches box boundaries;
 - [x] no structural line runs through a relation label;
-- [ ] independent mathematical review;
+- [x] independent mathematical review — CDA-REV-001, issue #2, exact head `c75d3aeb6ed1ceb4eb57224f025347729aeb627b`;
 - [ ] typography review at final manuscript placement;
 - [ ] grayscale/print proof;
