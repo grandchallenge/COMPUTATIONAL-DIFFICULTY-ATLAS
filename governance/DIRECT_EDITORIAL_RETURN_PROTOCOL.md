@@ -47,3 +47,25 @@ For CDA-REV-001 this is `reviews/CDA_REV_001_RECEIPT.json`. CI verifies that
 the receipt, adjudication record, F1.1 metadata, and F1.1 caption all name the
 same exact reviewed head, comment, assignment, and disposition. This prevents a
 manually mistyped SHA from silently becoming the durable review authority.
+
+## Missed-event replay
+
+The event-driven `issue_comment` workflow is not the sole delivery path.
+
+`.github/workflows/cda-direct-editorial-return-replay.yml` runs hourly and may
+also be dispatched manually. It scans open direct-editorial issues, reads their
+durable issue comments and Issue Fields, and replays any previously missed
+`RESULT/1` through the exact same fail-closed projector contract.
+
+The replay path:
+
+- does not synthesize review evidence;
+- ignores non-result comments;
+- may skip malformed RESULT/1 comments and continue to a later conforming one;
+- mutates only the same operational RETURNED state and lifecycle labels as the
+  event-driven workflow;
+- verifies Issue Field and label readback after repair;
+- remains authority-neutral.
+
+This makes durable issue comments the recovery substrate if GitHub event
+delivery is missed or the event-driven workflow does not run.
