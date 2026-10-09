@@ -1,0 +1,15 @@
+{
+  "schema": "CDA-REVIEW-RECEIPT/1",
+  "assignment_id": "CDA-REV-001",
+  "issue_number": 2,
+  "result_comment_id": 6072199152,
+  "reviewer_role": "INDEPENDENT_MATHEMATICAL_EDITORIAL_VERIFY",
+  "input_head": "c75d3aeb6ed1ceb4eb57224f025347729aeb627b",
+  "disposition": "APPROVE_WITH_CORRECTIONS",
+  "authority_effect": {
+    "review_adjudicated": false,
+    "editorial_accepted": false,
+    "publication_authorized": false,
+    "certification_authorized": false
+  }
+}
