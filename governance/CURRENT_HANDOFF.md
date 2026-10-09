@@ -1,41 +1,37 @@
 # Current Handoff
 
 Transaction: `CDA-ARCH-V0.1-FOUNDATIONS-001`  
-State: **WAITING_EXTERNAL_REVIEW**
+State: **READY_FOR_MERGE**
 
-The first architecture tranche for *A Mathematical Atlas of Computational Difficulty* is instantiated in PR #1 at candidate head:
+PR #1 is at exact candidate head:
 
-`c75d3aeb6ed1ceb4eb57224f025347729aeb627b`
+`a5435306250df0db45907cb0629ffbe58ad0b0b9`
 
-The candidate contains the pedagogical architecture, misconception controls, six keystone chapter specifications, and the revised Wolfram-produced F1.1 candidate with enlarged typography, explicit decision-problem formulations, and collision-free box geometry.
+The independent review job **CDA-REV-001** returned a conforming `RESULT/1` on issue #2 against exact reviewed head:
 
-An internal hostile preflight is recorded at `reviews/PREFLIGHT_001.md`. It repaired formulation defects and hidden pedagogical dependencies but is author-side evidence only; it does **not** satisfy the independent review gate.
+`c75d3aeb6ed1ceb4b6733bdd3eb0edb228d662386`
 
-The current review artifact is `figures/generated/F1_1_first_order_landscape.png`, rendered by Wolfram from the canonical source. SVG/PDF remain publication export targets defined by the Wolfram source and require final production regeneration before release.
+Disposition: **APPROVE_WITH_CORRECTIONS**.
 
-Independent review job **CDA-REV-001** is issue #2. It is published to GCL Worker Queue Project #2 with the direct-review discovery labels:
+The review verified the core mathematical containment claims, formulation discipline, pedagogical DAG, anchor trajectories, misconception controls, and F1.1 rendered typography/geometry. Its three requested follow-ups were adjudicated:
 
-- `gcl-job`
-- `gcl-state:available`
-- `gcl-collab:cooperative`
-- `gcl-role:verify`
-- `gcl-pickup:direct-editorial`
+1. C15 now explicitly depends on C01's formulation distinction in addition to C04/C05.
+2. F1.1 caption and metadata now bind the independent review evidence.
+3. SVG/PDF publication export regeneration remains an explicit pre-release check.
 
-The review must bind to the exact candidate head it inspected and return one `RESULT/1` comment on issue #2.
+The durable adjudication record is `reviews/CDA_REV_001_ADJUDICATION.md`.
+
+No second exact-head review is required for these changes because they are exactly the review-requested dependency clarification and review-evidence bookkeeping. No mathematical claim, Wolfram source, rendered figure geometry, theorem payload, or formulation changed. Any future substantive change to reviewed content reopens the exact-head review requirement.
+
+The Worker Queue return has been projected to `GCL State=RETURNED`, and the Project Status readback has been reconciled. CDA's repository-local direct-return projector is now on `main` via PR #3 for future direct-review jobs.
 
 ## Recovery rule
 
-Do not merge PR #1 merely because it is mechanically mergeable.
+1. confirm PR #1 still points to `a5435306250df0db45907cb0629ffbe58ad0b0b9`;
+2. merge PR #1 only if GitHub reports it mergeable against current main;
+3. read back the accepted architecture, F1.1 metadata/caption, and review adjudication on `main`;
+4. operationally close CDA-REV-001;
+5. update `ACTIVE_TRANSACTION.yaml` to COMPLETED;
+6. open the next bounded architecture/composition transaction.
 
-On recovery:
-
-1. inspect issue #2 for a conforming review return;
-2. confirm the returned `input_head`;
-3. compare it with the current PR #1 head;
-4. adjudicate corrections;
-5. rerender/re-review F1.1 if the reviewed content changes materially;
-6. merge only after the review gate is satisfied;
-7. verify accepted files on `main`;
-8. update this controller state to completed.
-
-There is no Human-Steward action required at this boundary. The outstanding dependency is worker review evidence.
+There is no Human-Steward action required at this boundary.
