@@ -60,7 +60,7 @@ C05 reductions
 
 Additional prerequisites:
 
-- C15 requires C04 and C05; factoring is used as the primary bridge.
+- C15 requires C01's formulation distinction, C04, and C05; factoring is used as the primary bridge.
 - C18 requires C06 and the decision/optimization distinction from C01.
 - C19 requires C06 and the worst-case framing from C02.
 
