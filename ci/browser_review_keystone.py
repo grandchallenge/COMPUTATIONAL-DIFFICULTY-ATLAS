@@ -54,7 +54,7 @@ with sync_playwright() as p:
           bodyMinWidth: getComputedStyle(document.body).minWidth,
           bodyOverflowX: getComputedStyle(document.body).overflowX,
           innerWidth: window.innerWidth,
-          offenders: [...document.body.getElementsByTagName('div')].map(el=>({tag:el.tagName,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(z=>z.right>454).slice(0,12)
+          offenders: [...document.body.getElementsByTagName('*')].map(el=>({tag:el.tagName,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width),client:el.clientWidth,scroll:el.scrollWidth})).filter(z=>z.right>454||z.scroll>z.client+24).sort((a,b)=>b.scroll-a.scroll).slice(0,20)
         })""")
         if mobile["bodyWidth"] > mobile["pageWidth"] + 24:
             raise RuntimeError(f"{id}: mobile overflow: {mobile}")
