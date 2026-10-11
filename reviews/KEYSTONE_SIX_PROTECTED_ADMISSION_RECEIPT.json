@@ -1,0 +1,59 @@
+{
+  "schema": "CDA-KEYSTONE-PROTECTED-ADMISSION/1",
+  "date_utc": "2026-10-11",
+  "scope": "Six chapter manuscript admission ONLY",
+  "chapters": [
+    "C01",
+    "C04",
+    "C05",
+    "C10",
+    "C15",
+    "C20"
+  ],
+  "original_review_issues": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "all_original_dispositions": "REQUEST_CHANGES",
+  "original_input_sha_by_pr": {
+    "6": "0deaa8be7f18ad4324f9d1af66dbf7c319c7d1d2",
+    "7": "8374afeff72a01010b28e739a34bc3408a0003b1"
+  },
+  "correction_ledger": "reviews/KEYSTONE_SIX_RETURN_RECONCILIATION_002.md",
+  "admitted_pr": 22,
+  "admitted_head": "44f4cabb4b94ed2da6c17490f33f57aff481643f",
+  "protected_merge_sha": "b4183c841cf991f92ccc411a80849ec7eb646a29",
+  "non_author_approval": {
+    "login": "jimsteeg",
+    "review_id": 5483270111,
+    "commit_id": "44f4cabb4b94ed2da6c17490f33f57aff481643f",
+    "state": "APPROVED"
+  },
+  "exact_head_ci": {
+    "run_id": 38137657658,
+    "conclusion": "success",
+    "math_examples": "passed",
+    "wolfram_source_and_svg_git_blob_gate": "passed_before_display",
+    "strict_mkdocs": "passed",
+    "chromium_desktop_mobile_mathjax": "passed",
+    "review_only_pdf_pages": 24
+  },
+  "publication": {
+    "full_monograph_chapters_planned": 23,
+    "chapters_manuscript_admitted": 6,
+    "figure_status": "candidate_unreviewed",
+    "pdf": "review_only_not_tagged",
+    "public_site": "not_authorized",
+    "formal_mathematical_certification": false,
+    "full_book_complete": false
+  },
+  "superseded_prs_closed_without_merge": [
+    6,
+    7
+  ],
+  "operational_note": "Live replay repair PR23 separately merged at 3812ab9af0733465e2da2cd6412007c35d928f67; live scheduler repeat pending"
+}
