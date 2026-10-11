@@ -1,0 +1,6 @@
+(* F3.2: polynomially bounded NP witnesses and deterministic polynomial verifier.
+   Vector source models the yes-witness quantifier and no-instance soundness,
+   not a proof of NP-hardness or P-vs-NP separation.
+   Reproduce with Wolfram Language from the repository root. *)
+figure = Module[{box,fig},box[t_,sub_]:=Framed[Column[{Style[t,22,Bold,FontFamily->"Times"],Style[sub,18,FontFamily->"Times"]},Alignment->Center,Spacings->.35],FrameStyle->GrayLevel[.25],Background->White,FrameMargins->{{13,13},{10,10}}];fig=Graphics[{Directive[Black,Thickness[.003],Arrowheads[.024]],Arrow[{{-4.05,.8},{-3.15,.30}}],Arrow[{{-3.85,-.8},{-3.15,-.28}}],Arrow[{{.26,0},{.90,0}}],Inset[box["Instance x","Decision-language input"],{-5.35,.95}],Inset[box["Certificate w","Polynomial-length witness"],{-5.35,-.95}],Inset[box["Verifier V(x,w)","Deterministic polynomial time"],{-1.45,0}],Inset[box["Accept or reject","One certificate checked"],{2.25,0}],Inset[Style["YES: some witness is accepted",21,FontFamily->"Times"],{0,-1.9}],Inset[Style["NO: every witness is rejected",21,FontFamily->"Times"],{0,-2.45}]},PlotRange->{{-7,5},{-3.1,2.1}},ImageSize->1000,Background->White];fig];
+Export["figures/generated/F3_2_np_verifier.svg",figure,"SVG"];
