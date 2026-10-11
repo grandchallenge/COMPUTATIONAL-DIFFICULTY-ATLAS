@@ -4,6 +4,8 @@ on:
     paths:
       - 'figures/**'
       - 'ci/check_keystone_figures.py'
+      - 'ci/verify_persisted_wolfram_assets.py'
+      - 'tests/test_wolfram_persistence_gate.py'
       - '.github/workflows/cda-keystone-figures-002.yml'
   workflow_dispatch:
 permissions:
@@ -19,12 +21,17 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12.13'
+      - name: Adversarial save-before-display tests
+        run: python -m unittest tests.test_wolfram_persistence_gate -v
+      - name: Verify complete source and SVG already exist as committed Git blobs
+        run: python ci/verify_persisted_wolfram_assets.py --figures F2_1 F3_2 F4_3 F6_2 --manifest build/figure-provenance.json
       - name: Validate vector paths and figure scope
         run: python ci/check_keystone_figures.py
       - name: Assemble review-only figure previews
         shell: bash
         run: |
           mkdir -p build/figure-previews
+          cp build/figure-provenance.json build/figure-previews/
           cp figures/generated/F2_1_translator_solver.svg build/figure-previews/
           cp figures/generated/F3_2_np_verifier.svg build/figure-previews/
           cp figures/generated/F4_3_savitch_midpoint.svg build/figure-previews/

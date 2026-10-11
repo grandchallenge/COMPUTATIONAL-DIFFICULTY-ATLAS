@@ -15,9 +15,12 @@ Correctness is non-negotiable. Completeness is added only when it does not obscu
 
 The default production path is:
 
-1. Wolfram-generated graphics.
-2. Evaluate the rendered result for pedagogical clarity.
-3. Replace or supplement with an alternate medium only when that medium communicates the intended idea better.
+1. Commit complete Wolfram source and parameters to durable Git storage.
+2. Export the complete vector graphic **without sending it to a display surface**; validate XML/geometry and commit the exported artifact. Verify both source and output by Git blob readback.
+3. Only after durable export, inspect a preview for pedagogical clarity and figure typography.
+4. Replace or supplement with an alternate medium only when that medium communicates the intended idea better.
+
+The binding operational ordering, including failure/recovery procedure and mandatory CI gate, is [WOLFRAM_SAVE_BEFORE_DISPLAY.md](WOLFRAM_SAVE_BEFORE_DISPLAY.md). Large Wolfram outputs must never depend on the conversation renderer, temporary notebook state, or a time-limited GitHub artifact as their only copy.
 
 This is a precedence rule, not a prohibition. TikZ/PGF, PGFPlots, SVG, hand-authored vector graphics, or other methods are preferred when they materially improve explanatory power, exact symbolic structure, accessibility, or typographic integration.
 
