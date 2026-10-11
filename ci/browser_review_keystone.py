@@ -48,6 +48,12 @@ with sync_playwright() as p:
         mobile = page.evaluate("""() => ({
           pageWidth: document.documentElement.clientWidth,
           bodyWidth: document.body.scrollWidth,
+          htmlWidth: document.documentElement.scrollWidth,
+          bodyRect: Math.round(document.body.getBoundingClientRect().width),
+          htmlRect: Math.round(document.documentElement.getBoundingClientRect().width),
+          bodyMinWidth: getComputedStyle(document.body).minWidth,
+          bodyOverflowX: getComputedStyle(document.body).overflowX,
+          innerWidth: window.innerWidth,
           offenders: [...document.body.getElementsByTagName('div')].map(el=>({tag:el.tagName,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(z=>z.right>454).slice(0,12)
         })""")
         if mobile["bodyWidth"] > mobile["pageWidth"] + 24:
