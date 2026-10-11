@@ -1,6 +1,8 @@
 """Pure admission-plan adversarial tests; never write GitHub state."""
 import copy
 import unittest
+from unittest.mock import patch
+from subprocess import CompletedProcess
 
 from ci import cda_review_job_admission as m
 
@@ -109,6 +111,29 @@ class AdmissionInvariants(unittest.TestCase):
         bad["body"] += "\nTARGET_HEAD: " + self.job["head"]
         with self.assertRaises(ValueError):
             m.validate_job(self.job, bad, [], self.pr())
+
+    def test_conflicting_duplicate_head_blocks(self):
+        bad = issue(self.job)
+        bad["body"] += "\nTARGET_HEAD: " + ("f" * 40)
+        with self.assertRaises(ValueError):
+            m.validate_job(self.job, bad, [], self.pr())
+
+    def test_conflicting_duplicate_state_blocks(self):
+        bad = issue(self.job)
+        bad["body"] += "\nSTATE: AVAILABLE"
+        with self.assertRaises(ValueError):
+            m.validate_job(self.job, bad, [], self.pr())
+
+    def test_successful_empty_api_write_returns_without_json_decode_failure(self):
+        with patch.object(m.subprocess, "run",
+                          return_value=CompletedProcess(["gh"], 0, stdout="", stderr="")):
+            self.assertIsNone(m.api("POST", "issues/9/labels", {"labels": ["test"]}))
+
+    def test_empty_api_get_fails_closed(self):
+        with patch.object(m.subprocess, "run",
+                          return_value=CompletedProcess(["gh"], 0, stdout="", stderr="")):
+            with self.assertRaises(ValueError):
+                m.api("GET", "issues/9")
 
     def test_wrong_campaign_blocks(self):
         bad = issue(self.job)
