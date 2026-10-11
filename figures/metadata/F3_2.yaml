@@ -1,0 +1,18 @@
+figure_id: F3.2
+title: Polynomial-witness verification for NP
+chapter: C04
+status: wolfram_svg_candidate_unreviewed
+pedagogical_question: Why is checking a supplied yes-witness different from finding one?
+source: figures/src/F3_2_np_verifier.wl
+generator: Wolfram Language
+output_artifact: figures/generated/F3_2_np_verifier.svg
+caption: figures/F3_2_CAPTION.md
+nominal_vector_width_pt: 1000
+claim_scope: np_bounded_yes_witness_verifier_not_separation
+review_complete: []
+review_required:
+  - mathematical
+  - pedagogical
+  - final_width_typography
+  - accessibility
+  - reproducible_export
