@@ -1,0 +1,13 @@
+site_name: A Mathematical Atlas of Computational Difficulty — Editorial Preview
+site_description: Unaccepted keystone manuscript drafts, for internal rendering and review
+docs_dir: build/docs
+site_dir: build/site
+theme:
+  name: mkdocs
+markdown_extensions:
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+strict: true
