@@ -39,5 +39,14 @@ content = [
 ]
 content.extend(f"- [{code}: {title}](chapters/{code}.md)" for code, title in found)
 content.extend(["", "The editorial authority remains in protected GitHub records; do not cite preview text as a certified result.", ""])
+# Preserve the exact relative paths used by both GitHub and MkDocs.
+figure_source = ROOT / "figures" / "generated" / "F15_1_grover_query_scaling.svg"
+figure_caption = ROOT / "figures" / "F15_1_CAPTION.md"
+if ("C15", titles["C15"]) in found:
+    if not figure_source.is_file() or not figure_caption.is_file():
+        raise SystemExit("Missing F15.1 vector/caption required by C15 manuscript")
+    (TARGET / "figures" / "generated").mkdir(parents=True, exist_ok=True)
+    copyfile(figure_source, TARGET / "figures" / "generated" / figure_source.name)
+    copyfile(figure_caption, TARGET / "figures" / figure_caption.name)
 (TARGET / "index.md").write_text("\n".join(content), encoding="utf-8")
 print(f"Staged {len(found)} candidate chapters for MkDocs preview")
