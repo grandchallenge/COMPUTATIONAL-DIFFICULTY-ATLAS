@@ -1,0 +1,88 @@
+/* Editorial candidate responsive math/figure rules.
+   Preserve vector scaling and scroll only genuinely too-wide equations. */
+img, svg, figure img {
+  max-width: 100%;
+  height: auto;
+}
+main, article, .content, .container, .col-md-9 {
+  min-width: 0;
+}
+main p, main li, main div {
+  overflow-wrap: break-word;
+}
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+table {
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+pre, code {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+@media print {
+  main img, main svg { max-width: 100% !important; height: auto; }
+  mjx-container { page-break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+}
+
+/* Inline MathJax can be wider than narrow mobile viewports even if its parent
+   has a small bounding box. Confine overflow to the equation itself. */
+main mjx-container, article mjx-container, .col-md-9 mjx-container {
+  display: inline-block;
+  max-width: min(100%, calc(100vw - 36px));
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: middle;
+}
+@media (max-width: 767px) {
+  body, main, article { width: auto; max-width: 100vw; }
+  main img, .col-md-9 img { width: auto; max-width: 100%; height: auto; }
+}
+
+/* A browser review PDF should look like a manuscript, not an exported navbar.
+   This applies only to printed/PDF media; web/mobile previews are unchanged. */
+@media print {
+  .navbar, .navbar-fixed-top, .navbar-header, .navbar-collapse,
+  .bs-sidebar, .col-md-3, nav, header, footer, .footer,
+  .md-header, .md-sidebar, .md-footer { display: none !important; }
+  html, body, main, article,
+  .container, .container-fluid, .row, .col-md-9,
+  .col-md-12, #content, .content, .main-content {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #111 !important;
+    background: white !important;
+  }
+  body { font-family: "Times New Roman", Georgia, serif; font-size: 11pt; line-height: 1.4; }
+  h1 { font-size: 23pt; margin: 0 0 14pt; }
+  h2 { font-size: 16pt; margin: 14pt 0 7pt; }
+  h3 { font-size: 13pt; margin: 12pt 0 6pt; }
+  p, ul, ol { margin-bottom: 8pt; orphans: 2; widows: 2; }
+  a { color: #111 !important; text-decoration: none !important; }
+  a[href]:after { content: none !important; }
+  img, svg { width: auto !important; height: auto !important; max-width: 100% !important; }
+  mjx-container { max-width: 100% !important; }
+  .page-header { border: 0 !important; }
+}
+
+/* Preserve Bootstrap hidden modal semantics during PDF print; do not unhide
+   Keyboard Shortcuts / Search dialogs over the entire manuscript page. */
+@media print {
+  .modal, .modal-backdrop, .modal.fade,
+  #mkdocs_keyboard_modal, #mkdocs_search_modal {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
