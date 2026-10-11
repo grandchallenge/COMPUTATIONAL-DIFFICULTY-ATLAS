@@ -106,8 +106,14 @@ def validate_job(job, issue, field_rows, pr):
     else:
         fail(f"#{number} unexpected labels {sorted(labs)}")
     fields = map_fields(field_rows)
-    if fields == {} and label_state == "staged" and state_staged:
+    if label_state == "staged" and state_staged and not fields:
         return "admit"
+    # Only already-correct subsets may be replayed after an interrupted field write.
+    if label_state == "staged" and state_staged and fields != FIELD_VALUES and all(
+        name in FIELD_VALUES and value == FIELD_VALUES[name]
+        for name, value in fields.items()
+    ):
+        return "finish_fields"
     if fields == FIELD_VALUES and label_state in {"staged", "partial_labels"} and state_staged:
         return "finish_labels"  # safe replay of interrupted label writes
     if fields == FIELD_VALUES and label_state == "available" and state_staged:
@@ -139,11 +145,17 @@ def load_registry():
 
 
 def set_fields(job):
-    rows = [{"field_id": field_id, "value": value}
-            for field_id, value in FIELDS.values()]
-    api("POST", f"issues/{job['issue']}/issue-field-values",
-        {"issue_field_values": rows})
-    actual = map_fields(api("GET", f"issues/{job['issue']}/issue-field-values"))
+    number = job["issue"]
+    existing = map_fields(api("GET", f"issues/{number}/issue-field-values"))
+    if any(k not in FIELD_VALUES or v != FIELD_VALUES[k] for k, v in existing.items()):
+        fail("partial field state inconsistent with protected registry")
+    # Single-field POST mirrors the already exercised direct-return projector contract.
+    for field_name, (field_id, value) in FIELDS.items():
+        if field_name in existing:
+            continue
+        api("POST", f"issues/{number}/issue-field-values",
+            {"issue_field_values": [{"field_id": field_id, "value": value}]})
+    actual = map_fields(api("GET", f"issues/{number}/issue-field-values"))
     if actual != FIELD_VALUES:
         fail("field write failed readback; do NOT add available labels")
 
@@ -194,7 +206,7 @@ def main():
     if os.environ.get("GITHUB_REF") != "refs/heads/main":
         fail("no activation from non-protected main")
     for job, state in zip(jobs, states):
-        if state == "admit":
+        if state in {"admit", "finish_fields"}:
             set_fields(job)
             add_labels(job)
         elif state == "finish_labels":
