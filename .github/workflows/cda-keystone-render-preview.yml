@@ -29,3 +29,17 @@ jobs:
         run: mkdocs build --strict
       - name: Inspect generated HTML math wrappers
         run: python ci/check_rendered_manuscript.py
+      - name: Record exact source provenance
+        shell: bash
+        run: |
+          mkdir -p build/site
+          printf 'checkout_commit=%s\n' "$(git rev-parse HEAD)" > build/site/SOURCE_COMMIT.txt
+          printf 'pr_head=%s\n' "${{ github.event.pull_request.head.sha }}" >> build/site/SOURCE_COMMIT.txt
+          printf 'workflow_run=%s\n' "$GITHUB_RUN_ID" >> build/site/SOURCE_COMMIT.txt
+      - name: Retain read-only HTML preview for reviewers
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-keystone-mkdocs-preview
+          path: build/site/
+          if-no-files-found: error
+          retention-days: 14
