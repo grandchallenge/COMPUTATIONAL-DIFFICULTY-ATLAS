@@ -90,7 +90,7 @@ def verify_figure(figure: str) -> dict:
         raise ValueError(f"Figure metadata does not bind exact source/output for {figure}")
     if "review_complete: []" not in md or "unreviewed" not in md:
         raise ValueError(f"Figure status is not explicitly unreviewed: {figure}")
-    if "Reproduce" not in caption and "reproduce" not in caption.lower():
+    if "reproduc" not in caption.lower():
         raise ValueError(f"Caption lacks reproducibility note: {figure}")
     return {"id": figure, **blobs}
 
