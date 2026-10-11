@@ -1,0 +1,33 @@
+/* Editorial candidate responsive math/figure rules.
+   Preserve vector scaling and scroll only genuinely too-wide equations. */
+img, svg, figure img {
+  max-width: 100%;
+  height: auto;
+}
+main, article, .content, .container, .col-md-9 {
+  min-width: 0;
+}
+main p, main li, main div {
+  overflow-wrap: break-word;
+}
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+table {
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+pre, code {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+@media print {
+  main img, main svg { max-width: 100% !important; height: auto; }
+  mjx-container { page-break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+}
