@@ -22,6 +22,7 @@ ROLE = "INDEPENDENT_MATHEMATICAL_EDITORIAL_VERIFY"
 PICKUP = "DIRECT_EDITORIAL_NO_CLAIM"
 BASE_LABELS = {"gcl-job", "gcl-role:verify", "gcl-collab:cooperative"}
 AVAILABLE_LABELS = BASE_LABELS | {"gcl-state:available", "gcl-pickup:direct-editorial"}
+RETURNED_LABELS = BASE_LABELS | {"gcl-state:returned", "gcl-pickup:direct-editorial"}
 FIELDS = {
     "GCL State": (47953501, "AVAILABLE"),
     "GCL Campaign": (47953502, CAMPAIGN),
@@ -76,7 +77,33 @@ def exact_line(body, key, expected):
         fail(f"missing/duplicate/mismatched body binding {key}")
 
 
-def validate_job(job, issue, field_rows, pr):
+def has_bound_result(comments, job):
+    """Require a real authenticated RESULT/1, not only a mutable RETURNED label."""
+    expected = {
+        "assignment_id": job["assignment_id"],
+        "reviewer_role": ROLE,
+        "input_head": job["head"],
+    }
+    for comment in comments or []:
+        body = comment.get("body") or ""
+        if not body.startswith("RESULT/1\n"):
+            continue
+        if not comment.get("id") or not (comment.get("user") or {}).get("login"):
+            continue
+        try:
+            for key, value in expected.items():
+                exact_line(body, key, value)
+            values = re.findall(r"^disposition:[ \t]*(.*?)[ \t]*$", body, re.M)
+            if len(values) == 1 and values[0] in {
+                "APPROVE", "APPROVE_WITH_CORRECTIONS", "REQUEST_CHANGES", "BLOCKED"
+            }:
+                return True
+        except ValueError:
+            continue
+    return False
+
+
+def validate_job(job, issue, field_rows, pr, comments=None):
     number, assignment, head = job["issue"], job["assignment_id"], job["head"]
     if not re.fullmatch(r"[0-9a-f]{40}", head):
         fail("invalid frozen head SHA")
@@ -102,10 +129,8 @@ def validate_job(job, issue, field_rows, pr):
         "PROTECTED_OR_RELEASE_MUTATION_AUTHORIZED": "NO",
     }.items():
         exact_line(body, key, val)
-    if pr.get("number") != job["pr"] or pr.get("state") != "open":
-        fail(f"#{number} target PR missing/open state changed")
-    if (pr.get("head") or {}).get("sha") != head:
-        fail(f"#{number} stale target PR head; immutable packet requires re-approval")
+    if pr.get("number") != job["pr"]:
+        fail(f"#{number} target PR identity mismatch")
     labs = labels_of(issue)
     if labs == BASE_LABELS:
         label_state = "staged"
@@ -113,9 +138,22 @@ def validate_job(job, issue, field_rows, pr):
         label_state = "available"
     elif labs > BASE_LABELS and labs < AVAILABLE_LABELS:
         label_state = "partial_labels"
+    elif labs == RETURNED_LABELS:
+        label_state = "returned"
     else:
         fail(f"#{number} unexpected labels {sorted(labs)}")
     fields = map_fields(field_rows)
+    if label_state == "returned":
+        expected = {**FIELD_VALUES, "GCL State": "RETURNED"}
+        if fields != expected or not state_ready or not has_bound_result(comments, job):
+            fail(f"#{number} RETURNED requires matching fields, labels, original bound result")
+        return "already_returned"
+    # Before a RESULT/1 return, every active queue packet must still target
+    # the exact frozen open pull-request head.
+    if pr.get("state") != "open":
+        fail(f"#{number} target PR no longer open")
+    if (pr.get("head") or {}).get("sha") != head:
+        fail(f"#{number} stale target PR head; immutable packet requires re-approval")
     if label_state == "staged" and state_staged and not fields:
         return "admit"
     # Only already-correct subsets may be replayed after an interrupted field write.
@@ -135,9 +173,15 @@ def validate_job(job, issue, field_rows, pr):
 
 def read_job(job):
     number = job["issue"]
-    return (api("GET", f"issues/{number}"),
-            api("GET", f"issues/{number}/issue-field-values"),
-            api("GET", f"pulls/{job['pr']}"))
+    issue = api("GET", f"issues/{number}")
+    fields = api("GET", f"issues/{number}/issue-field-values")
+    pr = api("GET", f"pulls/{job['pr']}")
+    comments = []
+    if map_fields(fields).get("GCL State") == "RETURNED":
+        comments = api("GET", f"issues/{number}/comments?per_page=100")
+        if len(comments) >= 100:
+            fail(f"#{number}: review-comment pagination requires explicit reconciliation")
+    return issue, fields, pr, comments
 
 
 def load_registry():
@@ -174,8 +218,8 @@ def add_labels(job):
     number = job["issue"]
     for name in ("gcl-pickup:direct-editorial", "gcl-state:available"):
         api("POST", f"issues/{number}/labels", {"labels": [name]})
-    issue, fields, pr = read_job(job)
-    if validate_job(job, issue, fields, pr) != "finish_body":
+    issue, fields, pr, comments = read_job(job)
+    if validate_job(job, issue, fields, pr, comments) != "finish_body":
         fail(f"#{number} failed final label+field readback")
     update_body(job, issue)
 
@@ -191,8 +235,8 @@ def update_body(job, issue):
     body = body.replace("This issue is **STAGED, NOT AVAILABLE**.",
                         "This issue is available only when authoritative GCL Issue Fields and lifecycle labels agree.")
     api("PATCH", f"issues/{number}", {"body": body})
-    new_issue, fields, pr = read_job(job)
-    if validate_job(job, new_issue, fields, pr) != "already_available":
+    new_issue, fields, pr, comments = read_job(job)
+    if validate_job(job, new_issue, fields, pr, comments) != "already_available":
         fail(f"#{number} failed post-release body+field readback")
 
 
@@ -204,8 +248,8 @@ def main():
     jobs = load_registry()
     states = []
     for job in jobs:  # full-cohort preflight before ANY mutation
-        issue, fields, pr = read_job(job)
-        states.append(validate_job(job, issue, fields, pr))
+        issue, fields, pr, comments = read_job(job)
+        states.append(validate_job(job, issue, fields, pr, comments))
     print(json.dumps([{"issue": j["issue"], "state": s}
                       for j, s in zip(jobs, states)], indent=2))
     if not options.execute:
@@ -222,14 +266,16 @@ def main():
         elif state == "finish_labels":
             add_labels(job)
         elif state == "finish_body":
-            issue, _, _ = read_job(job)
+            issue, _, _, _ = read_job(job)
             update_body(job, issue)
-        elif state == "already_available":
+        elif state in {"already_available", "already_returned"}:
             continue
     for job in jobs:
-        issue, fields, pr = read_job(job)
-        assert validate_job(job, issue, fields, pr) == "already_available"
-    print("Protected review-job admission readback: 6/6 AVAILABLE")
+        issue, fields, pr, comments = read_job(job)
+        assert validate_job(job, issue, fields, pr, comments) in {
+            "already_available", "already_returned"
+        }
+    print("Protected review-job admission readback: all six valid, including returned slots")
 
 
 if __name__ == "__main__":
