@@ -1,4 +1,4 @@
-site_name: A Mathematical Atlas of Computational Difficulty — editorial acceptance candidate
+site_name: Computational Difficulty Atlas
 docs_dir: build/docs
 site_dir: build/site
 theme:
