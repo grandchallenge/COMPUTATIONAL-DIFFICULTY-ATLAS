@@ -22,15 +22,15 @@ for name in REQUIRED:
     # GitHub documents dollar-delimited math; Arithmatex handles the same source.
     # Unsupported TeX wrappers can pass a naive balance check but display raw on GitHub.
     if r"\(" in text or r"\)" in text or r"\[" in text or r"\]" in text:
-        ERRORS.append(f"{path}: unsupported math wrapper; use $...$ or standalone $")
+        ERRORS.append(f"{path}: unsupported math wrapper; use inline dollar pairs or standalone double-dollar display math")
     display_count = 0
     for line_number, line in enumerate(text.splitlines(), start=1):
-        if line.strip() == "$":
+        if line.strip() == "$$":
             display_count += 1
             continue
-        if "$" in line:
-            ERRORS.append(f"{path}:{line_number}: display $ must occupy its own line")
-        if line.replace("$", "").count("$") % 2:
+        if "$$" in line:
+            ERRORS.append(f"{path}:{line_number}: display double-dollar pair must occupy its own line")
+        if line.replace("$$", "").count("$") % 2:
             ERRORS.append(f"{path}:{line_number}: odd number of inline-dollar delimiters")
     if display_count % 2:
         ERRORS.append(f"{path}: odd number of standalone display-math delimiters")
