@@ -1,0 +1,53 @@
+name: CDA six-keystone acceptance candidate
+on:
+  pull_request:
+    paths:
+      - 'chapters/**'
+      - 'figures/**'
+      - 'ci/stage_keystone_accepted_candidate.py'
+      - 'ci/check_keystone_accepted_candidate.py'
+      - 'tests/test_keystone_examples.py'
+      - '.github/workflows/cda-keystone-candidate.yml'
+      - 'mkdocs-keystone-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  corrected-keystone-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Replay deterministic mathematics examples
+        run: python -m unittest tests.test_keystone_examples -v
+      - name: Verify complete Wolfram assets are durable in Git HEAD BEFORE display
+        run: python ci/verify_persisted_wolfram_assets.py --figures F2_1 F3_2 F4_3 F6_2 F3_1 F15_1 --manifest build/figure-provenance.json
+      - name: Source and mathematical notation inspection
+        run: python ci/check_keystone_accepted_candidate.py
+      - name: Install pinned renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage corrected chapters and source-linked figures
+        run: python ci/stage_keystone_accepted_candidate.py
+      - name: Build strict editorial HTML
+        run: mkdocs build --strict -f mkdocs-keystone-candidate.yml
+      - name: Inspect built page and image references
+        run: python ci/check_keystone_accepted_candidate.py
+      - name: Record exact output provenance
+        shell: bash
+        run: |
+          cp build/figure-provenance.json build/site/FIGURE_PROVENANCE.json
+          printf 'commit=%s\n' "$(git rev-parse HEAD)" > build/site/SOURCE_COMMIT.txt
+          printf 'approval=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/site/SOURCE_COMMIT.txt
+          printf 'run=%s\n' "$GITHUB_RUN_ID" >> build/site/SOURCE_COMMIT.txt
+      - name: Store review-only HTML artifact (never deploy)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-six-keystone-acceptance-review
+          path: build/site/
+          retention-days: 14
+          if-no-files-found: error
