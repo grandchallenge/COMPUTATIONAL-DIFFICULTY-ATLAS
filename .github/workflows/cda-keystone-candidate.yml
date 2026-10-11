@@ -6,6 +6,7 @@ on:
       - 'figures/**'
       - 'ci/stage_keystone_accepted_candidate.py'
       - 'ci/check_keystone_accepted_candidate.py'
+      - 'ci/browser_review_keystone.py'
       - 'tests/test_keystone_examples.py'
       - '.github/workflows/cda-keystone-candidate.yml'
       - 'mkdocs-keystone-candidate.yml'
@@ -37,6 +38,12 @@ jobs:
         run: mkdocs build --strict -f mkdocs-keystone-candidate.yml
       - name: Inspect built page and image references
         run: python ci/check_keystone_accepted_candidate.py
+      - name: Install pinned headless Chromium replay
+        run: |
+          python -m pip install 'playwright==1.56.0' 'pypdf==6.1.1'
+          python -m playwright install chromium
+      - name: Verify actual browser MathJax, mobile layout and six-chapter PDF
+        run: python ci/browser_review_keystone.py
       - name: Record exact output provenance
         shell: bash
         run: |
@@ -49,5 +56,12 @@ jobs:
         with:
           name: cda-six-keystone-acceptance-review
           path: build/site/
+          retention-days: 14
+          if-no-files-found: error
+      - name: Archive browser screenshots and six-chapter PDF (review only)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-six-keystone-browser-pdf-review
+          path: build/browser-review/
           retention-days: 14
           if-no-files-found: error
