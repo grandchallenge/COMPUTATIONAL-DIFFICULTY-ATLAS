@@ -1,0 +1,46 @@
+name: CDA introductory manuscripts C02-C03
+on:
+  pull_request:
+    paths:
+      - 'chapters/C02.md'
+      - 'chapters/C03.md'
+      - 'tests/test_intro_chapters.py'
+      - 'ci/stage_intro_preview.py'
+      - 'ci/check_intro_preview.py'
+      - '.github/workflows/cda-intro-preview.yml'
+      - 'mkdocs-intro-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c02-c03-math-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Independent finite arithmetic and graph checks
+        run: python -m unittest tests.test_intro_chapters -v
+      - name: Install strict math renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage two unaccepted chapters
+        run: python ci/stage_intro_preview.py
+      - name: Build real math-aware HTML
+        run: mkdocs build --strict -f mkdocs-intro-preview.yml
+      - name: Inspect rendered HTML and provenance warning
+        run: python ci/check_intro_preview.py
+      - name: Retain review HTML with exact source commit
+        shell: bash
+        run: |
+          printf 'commit=%s\n' "$(git rev-parse HEAD)" > build/intro-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/intro-site/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c02-c03-review-html
+          path: build/intro-site/
+          if-no-files-found: error
+          retention-days: 14
