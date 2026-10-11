@@ -1,0 +1,18 @@
+figure_id: F4.3
+title: Savitch bounded reachability through midpoint configurations
+chapter: C10
+status: wolfram_svg_candidate_unreviewed
+pedagogical_question: How can exponentially many possible configurations be searched with reusable work space?
+source: figures/src/F4_3_savitch_midpoint.wl
+generator: Wolfram Language
+output_artifact: figures/generated/F4_3_savitch_midpoint.svg
+caption: figures/F4_3_CAPTION.md
+nominal_vector_width_pt: 1050
+claim_scope: savitch_midpoint_recurrence_not_polynomial_time
+review_complete: []
+review_required:
+  - mathematical
+  - pedagogical
+  - final_width_typography
+  - accessibility
+  - reproducible_export

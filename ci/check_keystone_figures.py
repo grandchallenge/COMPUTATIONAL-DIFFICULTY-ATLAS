@@ -9,6 +9,16 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 FILES = {
+    "F3_2": {
+        "name": "np_verifier",
+        "claim": "np_bounded_yes_witness_verifier_not_separation",
+        "required": ("The language belongs to NP", "every", "does not assert"),
+    },
+    "F4_3": {
+        "name": "savitch_midpoint",
+        "claim": "savitch_midpoint_recurrence_not_polynomial_time",
+        "required": ("bounded-reachability predicate", "midpoint configuration", "not a polynomial-time claim"),
+    },
     "F2_1": {
         "name": "translator_solver",
         "claim": "many_one_polynomial_reduction_direction_not_hardness_proof",
@@ -72,5 +82,5 @@ for stem, contract in FILES.items():
 if errors:
     print("\n".join(errors), file=sys.stderr)
     raise SystemExit(1)
-print("Two figure SVGs parse, preserve vector glyphs, carry scope/accessibility and Wolfram reproduction source.")
+print("Four figure SVGs parse, preserve vector glyphs, carry scope/accessibility and Wolfram reproduction source.")
 print("NOT mathematical acceptance or verified source-render equivalence.")
