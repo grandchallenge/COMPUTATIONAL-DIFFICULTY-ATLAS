@@ -135,6 +135,66 @@ class AdmissionInvariants(unittest.TestCase):
             with self.assertRaises(ValueError):
                 m.api("GET", "issues/9")
 
+    def returned_fields(self):
+        return [
+            {"issue_field_name": "GCL State",
+             "single_select_option": {"name": "RETURNED"}}
+        ] + [f for f in field_rows() if f["issue_field_name"] != "GCL State"]
+
+    def genuine_result(self):
+        return {
+            "id": 123456789,
+            "user": {"login": "authenticated-editor"},
+            "body": "\\n".join([
+                "RESULT/1",
+                f"assignment_id: {self.job['assignment_id']}",
+                f"reviewer_role: {m.ROLE}",
+                f"input_head: {self.job['head']}",
+                "disposition: REQUEST_CHANGES",
+                "",
+                "## Mathematical evidence",
+                "Independent numerical witness attached.",
+            ]).replace("\\n", "\n"),
+        }
+
+    def test_authenticated_return_is_terminal_for_admission(self):
+        changed_pr = self.pr()
+        changed_pr["head"]["sha"] = "b" * 40
+        item = issue(self.job, labels=m.RETURNED_LABELS, state="AVAILABLE")
+        self.assertEqual(m.validate_job(
+            self.job, item, self.returned_fields(), changed_pr,
+            [self.genuine_result()]
+        ), "already_returned")
+
+    def test_returned_label_with_no_result_fails_closed(self):
+        with self.assertRaises(ValueError):
+            m.validate_job(self.job, issue(self.job, labels=m.RETURNED_LABELS,
+                                           state="AVAILABLE"),
+                           self.returned_fields(), self.pr(), [])
+
+    def test_returned_wrong_head_fails_closed(self):
+        bad = self.genuine_result()
+        bad["body"] = bad["body"].replace(self.job["head"], "c"*40)
+        with self.assertRaises(ValueError):
+            m.validate_job(self.job, issue(self.job, labels=m.RETURNED_LABELS,
+                                           state="AVAILABLE"),
+                           self.returned_fields(), self.pr(), [bad])
+
+    def test_returned_comment_requires_authenticated_actor(self):
+        bad = self.genuine_result()
+        bad["user"] = {}
+        with self.assertRaises(ValueError):
+            m.validate_job(self.job, issue(self.job, labels=m.RETURNED_LABELS,
+                                           state="AVAILABLE"),
+                           self.returned_fields(), self.pr(), [bad])
+
+    def test_returned_cannot_keep_available_label(self):
+        hostile_labels = m.RETURNED_LABELS | {"gcl-state:available"}
+        with self.assertRaises(ValueError):
+            m.validate_job(self.job, issue(self.job, labels=hostile_labels,
+                                           state="AVAILABLE"),
+                           self.returned_fields(), self.pr(), [self.genuine_result()])
+
     def test_wrong_campaign_blocks(self):
         bad = issue(self.job)
         bad["body"] = bad["body"].replace(m.CAMPAIGN, "OTHER-CAMPAIGN")
