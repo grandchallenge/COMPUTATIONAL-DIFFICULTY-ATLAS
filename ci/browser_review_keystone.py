@@ -48,7 +48,7 @@ with sync_playwright() as p:
         mobile = page.evaluate("""() => ({
           pageWidth: document.documentElement.clientWidth,
           bodyWidth: document.body.scrollWidth,
-          offenders: [...document.querySelectorAll('img, mjx-container, main, article, pre, table')].map(el=>({tag:el.tagName,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(z=>z.right>454).slice(0,12)
+          offenders: [...document.body.getElementsByTagName('div')].map(el=>({tag:el.tagName,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(z=>z.right>454).slice(0,12)
         })""")
         if mobile["bodyWidth"] > mobile["pageWidth"] + 24:
             raise RuntimeError(f"{id}: mobile overflow: {mobile}")
