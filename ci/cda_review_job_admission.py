@@ -75,8 +75,13 @@ def validate_job(job, issue, field_rows, pr):
     if issue.get("number") != number or issue.get("state") != "open" or "pull_request" in issue:
         fail(f"#{number} is not the expected open non-PR issue")
     body = issue.get("body") or ""
+    staged_state = "STATE: STAGED_PENDING_AUTHORIZED_QUEUE_ADMISSION"
+    ready_state = "STATE: AVAILABLE"
+    state_staged = staged_state in body.splitlines()
+    state_ready = ready_state in body.splitlines()
+    if state_staged == state_ready:
+        fail(f"#{number} ambiguous issue body lifecycle STATE")
     for key, val in {
-        "STATE": "STAGED_PENDING_AUTHORIZED_QUEUE_ADMISSION",
         "ASSIGNMENT_ID": assignment,
         "CAMPAIGN": CAMPAIGN,
         "ROLE": ROLE,
@@ -96,14 +101,18 @@ def validate_job(job, issue, field_rows, pr):
         label_state = "staged"
     elif labs == AVAILABLE_LABELS:
         label_state = "available"
+    elif labs > BASE_LABELS and labs < AVAILABLE_LABELS:
+        label_state = "partial_labels"
     else:
         fail(f"#{number} unexpected labels {sorted(labs)}")
     fields = map_fields(field_rows)
-    if fields == {} and label_state == "staged":
+    if fields == {} and label_state == "staged" and state_staged:
         return "admit"
-    if fields == FIELD_VALUES and label_state == "staged":
-        return "finish_labels"  # safe replay if prior run wrote fields first
-    if fields == FIELD_VALUES and label_state == "available":
+    if fields == FIELD_VALUES and label_state in {"staged", "partial_labels"} and state_staged:
+        return "finish_labels"  # safe replay of interrupted label writes
+    if fields == FIELD_VALUES and label_state == "available" and state_staged:
+        return "finish_body"
+    if fields == FIELD_VALUES and label_state == "available" and state_ready:
         return "already_available"
     fail(f"#{number} partial/hostile Issue Field state {fields}")
 
@@ -144,8 +153,25 @@ def add_labels(job):
     for name in ("gcl-pickup:direct-editorial", "gcl-state:available"):
         api("POST", f"issues/{number}/labels", {"labels": [name]})
     issue, fields, pr = read_job(job)
-    if validate_job(job, issue, fields, pr) != "already_available":
+    if validate_job(job, issue, fields, pr) != "finish_body":
         fail(f"#{number} failed final label+field readback")
+    update_body(job, issue)
+
+
+def update_body(job, issue):
+    number = job["issue"]
+    old = "STATE: STAGED_PENDING_AUTHORIZED_QUEUE_ADMISSION"
+    new = "STATE: AVAILABLE"
+    body = issue.get("body") or ""
+    if body.count(old) != 1:
+        fail(f"#{number} stage body does not match immutable release transition")
+    body = body.replace(old, new)
+    body = body.replace("This issue is **STAGED, NOT AVAILABLE**.",
+                        "This issue is available only when authoritative GCL Issue Fields and lifecycle labels agree.")
+    api("PATCH", f"issues/{number}", {"body": body})
+    new_issue, fields, pr = read_job(job)
+    if validate_job(job, new_issue, fields, pr) != "already_available":
+        fail(f"#{number} failed post-release body+field readback")
 
 
 def main():
@@ -173,6 +199,9 @@ def main():
             add_labels(job)
         elif state == "finish_labels":
             add_labels(job)
+        elif state == "finish_body":
+            issue, _, _ = read_job(job)
+            update_body(job, issue)
         elif state == "already_available":
             continue
     for job in jobs:
