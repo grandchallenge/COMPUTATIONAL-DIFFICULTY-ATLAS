@@ -1,0 +1,49 @@
+{
+  "schema": "GCL-CDA-REVIEW-ADMISSION/1",
+  "campaign": "COMPUTATIONAL-DIFFICULTY-ATLAS",
+  "authority": "effective only upon protected merge to main; no self-authorization from draft PR",
+  "jobs": [
+    {
+      "assignment_id": "CDA-REV-C01-002",
+      "chapter": "C01",
+      "issue": 9,
+      "pr": 6,
+      "head": "0deaa8be7f18ad4324f9d1af66dbf7c319c7d1d2"
+    },
+    {
+      "assignment_id": "CDA-REV-C04-002",
+      "chapter": "C04",
+      "issue": 10,
+      "pr": 7,
+      "head": "8374afeff72a01010b28e739a34bc3408a0003b1"
+    },
+    {
+      "assignment_id": "CDA-REV-C05-002",
+      "chapter": "C05",
+      "issue": 11,
+      "pr": 7,
+      "head": "8374afeff72a01010b28e739a34bc3408a0003b1"
+    },
+    {
+      "assignment_id": "CDA-REV-C10-002",
+      "chapter": "C10",
+      "issue": 12,
+      "pr": 7,
+      "head": "8374afeff72a01010b28e739a34bc3408a0003b1"
+    },
+    {
+      "assignment_id": "CDA-REV-C15-002",
+      "chapter": "C15",
+      "issue": 13,
+      "pr": 7,
+      "head": "8374afeff72a01010b28e739a34bc3408a0003b1"
+    },
+    {
+      "assignment_id": "CDA-REV-C20-002",
+      "chapter": "C20",
+      "issue": 14,
+      "pr": 7,
+      "head": "8374afeff72a01010b28e739a34bc3408a0003b1"
+    }
+  ]
+}
