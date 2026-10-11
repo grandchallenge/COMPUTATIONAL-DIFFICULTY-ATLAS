@@ -19,6 +19,21 @@ for name in REQUIRED:
     for opening, closing in ((r"\(", r"\)"), (r"\[", r"\]")):
         if text.count(opening) != text.count(closing):
             ERRORS.append(f"{path}: mismatched {opening}/{closing} delimiters")
+    # GitHub documents dollar-delimited math; Arithmatex handles the same source.
+    # Unsupported TeX wrappers can pass a naive balance check but display raw on GitHub.
+    if r"\(" in text or r"\)" in text or r"\[" in text or r"\]" in text:
+        ERRORS.append(f"{path}: unsupported math wrapper; use $...$ or standalone $")
+    display_count = 0
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if line.strip() == "$":
+            display_count += 1
+            continue
+        if "$" in line:
+            ERRORS.append(f"{path}:{line_number}: display $ must occupy its own line")
+        if line.replace("$", "").count("$") % 2:
+            ERRORS.append(f"{path}:{line_number}: odd number of inline-dollar delimiters")
+    if display_count % 2:
+        ERRORS.append(f"{path}: odd number of standalone display-math delimiters")
     required = ("## Question", "## Exercises", "## Map update")
     for section in required:
         if section not in text:
