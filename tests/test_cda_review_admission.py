@@ -49,9 +49,17 @@ class AdmissionInvariants(unittest.TestCase):
     def test_staged_admits_only_when_fields_empty(self):
         self.assertEqual(m.validate_job(self.job, issue(self.job), [], self.pr()), "admit")
 
-    def test_partly_written_fields_fail_closed(self):
+    def test_matching_partial_fields_resume_without_false_availability(self):
+        self.assertEqual(
+            m.validate_job(self.job, issue(self.job), field_rows()[:1], self.pr()),
+            "finish_fields",
+        )
+
+    def test_hostile_partial_field_value_fails_closed(self):
+        hostile = field_rows()[:1]
+        hostile[0]["single_select_option"]["name"] = "RETURNED"
         with self.assertRaises(ValueError):
-            m.validate_job(self.job, issue(self.job), field_rows()[:1], self.pr())
+            m.validate_job(self.job, issue(self.job), hostile, self.pr())
 
     def test_restart_after_field_write(self):
         self.assertEqual(
