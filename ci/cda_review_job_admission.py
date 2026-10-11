@@ -44,6 +44,13 @@ def api(method, route, payload=None):
                             text=True, capture_output=True, check=False)
     if result.returncode:
         fail(f"gh api {method} {route}: {result.stderr.strip()}")
+    # Some successful GitHub mutating endpoints return 204 / an empty body.
+    # A state-changing success is determined by the subsequent readback, not by
+    # assuming every write returned JSON.
+    if not result.stdout.strip():
+        if method == "GET":
+            fail(f"gh api GET {route}: empty response")
+        return None
     return json.loads(result.stdout)
 
 
@@ -63,8 +70,9 @@ def map_fields(data):
 
 
 def exact_line(body, key, expected):
-    value = re.escape(expected)
-    if len(re.findall(rf"^{re.escape(key)}:[ \t]*{value}[ \t]*$", body, re.M)) != 1:
+    # Reject *all* duplicate keys, including a correct value plus a hostile one.
+    values = re.findall(rf"^{re.escape(key)}:[ \t]*(.*?)[ \t]*$", body, re.M)
+    if len(values) != 1 or values[0].strip() != expected:
         fail(f"missing/duplicate/mismatched body binding {key}")
 
 
@@ -77,10 +85,12 @@ def validate_job(job, issue, field_rows, pr):
     body = issue.get("body") or ""
     staged_state = "STATE: STAGED_PENDING_AUTHORIZED_QUEUE_ADMISSION"
     ready_state = "STATE: AVAILABLE"
-    state_staged = staged_state in body.splitlines()
-    state_ready = ready_state in body.splitlines()
-    if state_staged == state_ready:
+    state_lines = [line.strip() for line in body.splitlines()
+                   if re.match(r"^STATE:", line)]
+    if len(state_lines) != 1 or state_lines[0] not in {staged_state, ready_state}:
         fail(f"#{number} ambiguous issue body lifecycle STATE")
+    state_staged = state_lines[0] == staged_state
+    state_ready = state_lines[0] == ready_state
     for key, val in {
         "ASSIGNMENT_ID": assignment,
         "CAMPAIGN": CAMPAIGN,
