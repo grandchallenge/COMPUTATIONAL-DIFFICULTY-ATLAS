@@ -39,6 +39,6 @@ jobs:
           python-version: "3.12.13"
       - name: Test direct-return projector and replay watchdog
         run: |
-          python -m unittest tests.test_cda_direct_return_projector tests.test_cda_direct_return_reconcile -v
+          python -m unittest tests.test_cda_direct_return_projector tests.test_cda_direct_return_reconcile tests.test_cda_return_replay_entrypoint -v
       - name: Validate adjudicated review provenance
         run: python ci/validate_review_provenance.py
