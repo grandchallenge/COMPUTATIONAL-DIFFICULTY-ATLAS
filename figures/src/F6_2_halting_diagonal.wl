@@ -1,0 +1,5 @@
+(* F6.2 diagonal contradiction for an unrestricted total halting decider.
+   Logical proof-schematic only, not a computation of halting instances.
+   Reproduce from repository root with wolframscript. *)
+figure = Module[{box,fig},box[a_,b_]:=Framed[Column[{Style[a,23,Bold,FontFamily->"Times"],Style[b,18,FontFamily->"Times"]},Alignment->Center,Spacings->.4],FrameStyle->GrayLevel[.25],Background->White,FrameMargins->{{16,16},{12,12}}];fig=Graphics[{Directive[Black,Thickness[.003],Arrowheads[.02]],Arrow[{{0,2.4},{0,1.45}}],Arrow[{{-.5,.8},{-3,0}}],Arrow[{{.5,.8},{3,0}}],Arrow[{{-3,-.65},{-3,-1.5}}],Arrow[{{3,-.65},{3,-1.5}}],Inset[box["Hypothetical decider H","Predict halting for every program/input pair"],{0,2.95}],Inset[box["Self-application","Ask H(d, d) about program D"],{0,1.05}],Inset[box["H(d, d) = 1","Predict D(d) halts"],{-3,0}],Inset[box["H(d, d) = 0","Predict D(d) does not halt"],{3,0}],Inset[box["But D(d) loops","Contradiction"],{-3,-2}],Inset[box["But D(d) halts","Contradiction"],{3,-2}]},PlotRange->{{-6.5,6.5},{-2.9,3.85}},ImageSize->1100,Background->White];fig];
+Export["figures/generated/F6_2_halting_diagonal.svg",figure,"SVG"];
