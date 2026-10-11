@@ -1,0 +1,57 @@
+name: CDA six-keystone integrated editorial preview
+on:
+  push:
+    branches:
+      - preview/keystone-integration-001
+    paths:
+      - 'chapters/**'
+      - 'figures/**'
+      - 'preview/**'
+      - 'ci/stage_keystone_integrated_preview.py'
+      - 'ci/check_keystone_integrated_preview.py'
+      - 'mkdocs-keystone-preview.yml'
+      - '.github/workflows/cda-keystone-integrated-preview.yml'
+  pull_request:
+    paths:
+      - 'chapters/**'
+      - 'figures/**'
+      - 'preview/**'
+      - 'ci/stage_keystone_integrated_preview.py'
+      - 'ci/check_keystone_integrated_preview.py'
+      - 'mkdocs-keystone-preview.yml'
+      - '.github/workflows/cda-keystone-integrated-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Install pinned MkDocs renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage six exact-head manuscripts and unaccepted figures
+        run: python ci/stage_keystone_integrated_preview.py
+      - name: Build review-only MkDocs HTML
+        run: mkdocs build --strict -f mkdocs-keystone-preview.yml
+      - name: Validate all HTML, SVGs and source-lock provenance
+        run: python ci/check_keystone_integrated_preview.py
+      - name: Bind generated artifact to source commit
+        shell: bash
+        run: |
+          printf 'checkout_commit=%s\n' "$(git rev-parse HEAD)" > build/site/SOURCE_COMMIT.txt
+          printf 'workflow_run=%s\n' "$GITHUB_RUN_ID" >> build/site/SOURCE_COMMIT.txt
+          printf 'authority=UNACCEPTED_EDITORIAL_PREVIEW_NOT_PUBLISHED\n' >> build/site/SOURCE_COMMIT.txt
+      - name: Archive private-run reviewer HTML, never publish to Pages
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-six-keystone-unaccepted-editorial-preview
+          path: build/site/
+          if-no-files-found: error
+          retention-days: 14
