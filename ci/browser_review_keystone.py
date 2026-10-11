@@ -58,6 +58,9 @@ with sync_playwright() as p:
         })""")
         if mobile["bodyWidth"] > mobile["pageWidth"] + 24:
             raise RuntimeError(f"{id}: mobile overflow: {mobile}")
+        # Reset the browser to A4-like print width after the 430px mobile QA.
+        # Otherwise Chromium silently typesets the PDF at mobile width.
+        page.set_viewport_size({"width": 794, "height": 1123})
         page.emulate_media(media="print")
         out_pdf = OUT / f"{id}.pdf"
         page.pdf(path=str(out_pdf), print_background=True, format="A4",
