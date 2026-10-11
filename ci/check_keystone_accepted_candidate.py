@@ -23,7 +23,7 @@ for chapter in CHAPTERS:
         continue
     src = path.read_text(encoding="utf-8")
     for section in ("Exercises", "Map update"):
-        if not re.search(r"^## (?:[0-9]+\\.\\s*)?" + re.escape(section) + r"\\b", src, re.M):
+        if not any(line.startswith("## ") and line.rstrip().endswith(section) for line in src.splitlines()):
             errors.append(f"{chapter} missing {section} section")
     if not src.startswith(f"# {chapter}"):
         errors.append(f"{chapter} incorrect title")
