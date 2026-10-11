@@ -11,14 +11,17 @@ on:
     paths:
       - 'governance/CDA_REVIEW_ADMISSION_002.json'
   workflow_dispatch:
-permissions:
-  contents: read
-  issues: write
 concurrency:
   group: cda-review-admission-002
   cancel-in-progress: false
+
 jobs:
-  review-job-admission:
+  read-only-preflight:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -28,14 +31,36 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12.13'
-      - name: Adversarial admission invariant tests
+      - name: Test admission invariants (no writes)
         run: python -m unittest tests.test_cda_review_admission -v
-      - name: Check six immutable issue/PR/field bindings without mutation
+      - name: Read issue, PR and Issue Field state without mutation
         env:
           GH_TOKEN: ${{ github.token }}
         run: python ci/cda_review_job_admission.py
-      - name: Admit only after protected main transition
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+
+  protected-activation:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Test admission invariants
+        run: python -m unittest tests.test_cda_review_admission -v
+      - name: Confirm all six immutable packets before write
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python ci/cda_review_job_admission.py
+      - name: Apply protected Issue Fields and read back all states
         env:
           GH_TOKEN: ${{ github.token }}
         run: python ci/cda_review_job_admission.py --execute
