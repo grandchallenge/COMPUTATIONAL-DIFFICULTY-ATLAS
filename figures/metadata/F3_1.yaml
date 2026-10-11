@@ -1,0 +1,20 @@
+figure_id: F3.1
+title: Traveling salesperson problem-formulation fork
+chapter: C01
+status: render_candidate_unreviewed
+pedagogical_question: Why does the same mathematical setting define different computational tasks?
+misconceptions:
+  - M13
+source: figures/src/F3_1_tsp_formulation_fork.wl
+generator: Wolfram Language
+output_artifact: figures/generated/F3_1_tsp_formulation_fork.svg
+caption: figures/F3_1_CAPTION.md
+graphic_scope: formulation_edges_not_reductions
+nominal_vector_width_pt: 950
+review_complete: []
+review_required:
+  - mathematical
+  - pedagogical
+  - final_width_typography
+  - accessibility
+  - reproducible_export
