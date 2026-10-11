@@ -52,7 +52,7 @@ main mjx-container, article mjx-container, .col-md-9 mjx-container {
   .navbar, .navbar-fixed-top, .navbar-header, .navbar-collapse,
   .bs-sidebar, .col-md-3, nav, header, footer, .footer,
   .md-header, .md-sidebar, .md-footer { display: none !important; }
-  html, body, body > div, main, article,
+  html, body, main, article,
   .container, .container-fluid, .row, .col-md-9,
   .col-md-12, #content, .content, .main-content {
     display: block !important;
@@ -75,4 +75,14 @@ main mjx-container, article mjx-container, .col-md-9 mjx-container {
   img, svg { width: auto !important; height: auto !important; max-width: 100% !important; }
   mjx-container { max-width: 100% !important; }
   .page-header { border: 0 !important; }
+}
+
+/* Preserve Bootstrap hidden modal semantics during PDF print; do not unhide
+   Keyboard Shortcuts / Search dialogs over the entire manuscript page. */
+@media print {
+  .modal, .modal-backdrop, .modal.fade,
+  #mkdocs_keyboard_modal, #mkdocs_search_modal {
+    display: none !important;
+    visibility: hidden !important;
+  }
 }
