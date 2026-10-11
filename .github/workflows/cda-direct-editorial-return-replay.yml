@@ -56,7 +56,7 @@ jobs:
               > "$comment_pages"
             jq 'add // []' "$comment_pages" > "$comments_json"
 
-            python ci/cda_direct_return_reconcile.py \
+            python -m ci.cda_direct_return_reconcile \
               --issue "$issue_json" \
               --issue-fields "$fields_json" \
               --comments "$comments_json" \
