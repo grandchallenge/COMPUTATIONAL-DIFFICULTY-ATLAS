@@ -31,3 +31,17 @@ pre {
   mjx-container { page-break-inside: avoid; }
   h1, h2, h3 { break-after: avoid; }
 }
+
+/* Inline MathJax can be wider than narrow mobile viewports even if its parent
+   has a small bounding box. Confine overflow to the equation itself. */
+main mjx-container, article mjx-container, .col-md-9 mjx-container {
+  display: inline-block;
+  max-width: min(100%, calc(100vw - 36px));
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: middle;
+}
+@media (max-width: 767px) {
+  body, main, article { width: auto; max-width: 100vw; }
+  main img, .col-md-9 img { width: auto; max-width: 100%; height: auto; }
+}
