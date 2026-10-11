@@ -1,0 +1,21 @@
+{
+  "schema": "GCL-CDA-REVIEW-ADMISSION/1",
+  "campaign": "COMPUTATIONAL-DIFFICULTY-ATLAS",
+  "authority": "Effective only on protected main after admission-003 merge; staged issue not worker available",
+  "jobs": [
+    {
+      "assignment_id": "CDA-REV-C02-003",
+      "chapter": "C02",
+      "issue": 26,
+      "pr": 25,
+      "head": "ce0087442a7c317cf65f38c3ab1cdf1944a4eac3"
+    },
+    {
+      "assignment_id": "CDA-REV-C03-003",
+      "chapter": "C03",
+      "issue": 27,
+      "pr": 25,
+      "head": "ce0087442a7c317cf65f38c3ab1cdf1944a4eac3"
+    }
+  ]
+}
