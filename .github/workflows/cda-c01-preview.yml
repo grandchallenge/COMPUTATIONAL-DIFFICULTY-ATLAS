@@ -1,0 +1,53 @@
+name: CDA C01 mathematical source and MkDocs preview
+on:
+  pull_request:
+    paths:
+      - 'chapters/C01.md'
+      - 'figures/**'
+      - 'ci/check_c01_preview.py'
+      - 'mkdocs-c01-preview.yml'
+      - '.github/workflows/cda-c01-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c01-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Install pinned rendering dependencies
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Verify manuscript and vector figure
+        run: python ci/check_c01_preview.py
+      - name: Render exact source as strict MkDocs preview
+        run: mkdocs build --strict -f mkdocs-c01-preview.yml
+      - name: Inspect HTML publication paths and math wrappers
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          d = Path("build/site")
+          chapter = (d / "chapters/C01/index.html").read_text()
+          assert "F3_1_tsp_formulation_fork.svg" in chapter
+          assert "arithmatex" in chapter
+          assert (d / "figures/generated/F3_1_tsp_formulation_fork.svg").is_file()
+          assert "not yet independently reviewed" in (d / "index.html").read_text().lower()
+          print("C01 review HTML, equations and vector figure retained")
+          PY
+      - name: Record exact source provenance
+        run: |
+          printf 'checkout_commit=%s\n' "$(git rev-parse HEAD)" > build/site/SOURCE_COMMIT.txt
+          printf 'pr_head=%s\n' "${{ github.event.pull_request.head.sha }}" >> build/site/SOURCE_COMMIT.txt
+          printf 'workflow_run=%s\n' "$GITHUB_RUN_ID" >> build/site/SOURCE_COMMIT.txt
+      - name: Archive reviewer-ready preview
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c01-editorial-preview
+          path: build/site/
+          if-no-files-found: error
+          retention-days: 14
