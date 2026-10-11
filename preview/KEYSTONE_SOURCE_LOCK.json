@@ -1,0 +1,57 @@
+{
+  "schema": "CDA-KEYSTONE-PREVIEW-LOCK/1",
+  "status": "UNACCEPTED_EDITORIAL_PREVIEW_NOT_PUBLISHED",
+  "parent_protected_main_at_fork": "60ea468dadd78bfdfbbd3dc14b7ec4409f6f965e",
+  "chapters": {
+    "C01": {
+      "reviewed_pr": 6,
+      "source_head": "2e769e4da18423f39d58f95b8fae55748492205e",
+      "blob_sha": "4a75f201e95da4533cd454f30119c5235a2bd9b7",
+      "review_status": "REQUEST_CHANGES_REPAIRED_PENDING_ADJUDICATION"
+    },
+    "C04": {
+      "reviewed_pr": 7,
+      "source_head": "8374afeff72a01010b28e739a34bc3408a0003b1",
+      "blob_sha": "6864d31fe93a8c98b22a1e75445db9c6091e241c",
+      "review_status": "AVAILABLE_FOR_CRITICAL_REVIEW"
+    },
+    "C05": {
+      "reviewed_pr": 7,
+      "source_head": "8374afeff72a01010b28e739a34bc3408a0003b1",
+      "blob_sha": "7dad2ed3e1114f69e098470970efd6f9389d737b",
+      "review_status": "AVAILABLE_FOR_CRITICAL_REVIEW"
+    },
+    "C10": {
+      "reviewed_pr": 7,
+      "source_head": "8374afeff72a01010b28e739a34bc3408a0003b1",
+      "blob_sha": "7755d850b650a0d3e00917f11f2923255d1c6983",
+      "review_status": "AVAILABLE_FOR_CRITICAL_REVIEW"
+    },
+    "C15": {
+      "reviewed_pr": 7,
+      "source_head": "8374afeff72a01010b28e739a34bc3408a0003b1",
+      "blob_sha": "fcebb79637d758b46a049aada59d701886019471",
+      "review_status": "AVAILABLE_FOR_CRITICAL_REVIEW"
+    },
+    "C20": {
+      "reviewed_pr": 7,
+      "source_head": "8374afeff72a01010b28e739a34bc3408a0003b1",
+      "blob_sha": "2b6c8903dd0f6a27066aec1c689c00716a1e4157",
+      "review_status": "AVAILABLE_FOR_CRITICAL_REVIEW"
+    }
+  },
+  "branch_only_figure_blobs": {
+    "figures/generated/F3_1_tsp_formulation_fork.svg": "e58f507eae74408a54be99148115ccba96be1aca",
+    "figures/generated/F15_1_grover_query_scaling.svg": "983ac8cfea79c864f1a65756d104a2f09d93d0fd"
+  },
+  "figure_ids": [
+    "F3_1",
+    "F3_2",
+    "F2_1",
+    "F4_3",
+    "F15_1",
+    "F6_2"
+  ],
+  "publisher_authority": false,
+  "editorial_acceptance": false
+}
