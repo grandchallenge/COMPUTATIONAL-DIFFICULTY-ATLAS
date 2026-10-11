@@ -3,6 +3,7 @@
 from pathlib import Path
 from xml.etree import ElementTree as ET
 import sys
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 CHAPTERS = ("C01", "C04", "C05", "C10", "C15", "C20")
@@ -21,9 +22,9 @@ for chapter in CHAPTERS:
         errors.append(f"missing source chapter {chapter}")
         continue
     src = path.read_text(encoding="utf-8")
-    for section in ("## Exercises", "## Map update"):
-        if section not in src:
-            errors.append(f"{chapter} missing {section}")
+    for section in ("Exercises", "Map update"):
+        if not re.search(r"^## (?:[0-9]+\\.\\s*)?" + re.escape(section) + r"\\b", src, re.M):
+            errors.append(f"{chapter} missing {section} section")
     if not src.startswith(f"# {chapter}"):
         errors.append(f"{chapter} incorrect title")
     if len(src) < 3000:
