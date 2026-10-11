@@ -21,3 +21,5 @@ jobs:
           python-version: '3.12.13'
       - name: Verify chapter structure and mathematical delimiters
         run: python ci/validate_keystone_drafts.py
+      - name: Replay finite mathematical examples
+        run: python -m unittest tests.test_keystone_examples -v
