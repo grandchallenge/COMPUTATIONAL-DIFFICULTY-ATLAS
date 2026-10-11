@@ -47,7 +47,8 @@ with sync_playwright() as p:
         page.screenshot(path=str(OUT / f"{id}_mobile.png"), full_page=True)
         mobile = page.evaluate("""() => ({
           pageWidth: document.documentElement.clientWidth,
-          bodyWidth: document.body.scrollWidth
+          bodyWidth: document.body.scrollWidth,
+          offenders: [...document.querySelectorAll('img, mjx-container, main, article, pre, table')].map(el=>({tag:el.tagName,right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(z=>z.right>454).slice(0,12)
         })""")
         if mobile["bodyWidth"] > mobile["pageWidth"] + 24:
             raise RuntimeError(f"{id}: mobile overflow: {mobile}")
