@@ -1,0 +1,39 @@
+name: CDA keystone vector figure candidates
+on:
+  pull_request:
+    paths:
+      - 'figures/**'
+      - 'ci/check_keystone_figures.py'
+      - '.github/workflows/cda-keystone-figures-002.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  figure-structure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Validate vector paths and figure scope
+        run: python ci/check_keystone_figures.py
+      - name: Assemble review-only figure previews
+        shell: bash
+        run: |
+          mkdir -p build/figure-previews
+          cp figures/generated/F2_1_translator_solver.svg build/figure-previews/
+          cp figures/generated/F6_2_halting_diagonal.svg build/figure-previews/
+          cp figures/F2_1_CAPTION.md figures/F6_2_CAPTION.md build/figure-previews/
+          printf 'checkout_commit=%s\n' "$(git rev-parse HEAD)" > build/figure-previews/SOURCE_COMMIT.txt
+          printf 'workflow_run=%s\n' "$GITHUB_RUN_ID" >> build/figure-previews/SOURCE_COMMIT.txt
+      - name: Retain read-only Wolfram figure candidates
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-F2-F6-vector-figure-review
+          path: build/figure-previews/
+          retention-days: 14
+          if-no-files-found: error

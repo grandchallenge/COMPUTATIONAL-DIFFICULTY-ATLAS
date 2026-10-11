@@ -1,0 +1,18 @@
+figure_id: F2.1
+title: Polynomial-time reduction translator and target solver
+chapter: C05
+status: wolfram_svg_candidate_unreviewed
+pedagogical_question: Why does A reduce to B mean a B solver solves A?
+source: figures/src/F2_1_translator_solver.wl
+generator: Wolfram Language
+output_artifact: figures/generated/F2_1_translator_solver.svg
+caption: figures/F2_1_CAPTION.md
+nominal_vector_width_pt: 1000
+claim_scope: many_one_polynomial_reduction_direction_not_hardness_proof
+review_complete: []
+review_required:
+  - mathematical
+  - pedagogical
+  - final_width_typography
+  - accessibility
+  - reproducible_export
