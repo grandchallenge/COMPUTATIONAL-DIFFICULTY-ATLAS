@@ -62,6 +62,12 @@ with sync_playwright() as p:
         # Otherwise Chromium silently typesets the PDF at mobile width.
         page.set_viewport_size({"width": 794, "height": 1123})
         page.emulate_media(media="print")
+        overlays = page.evaluate("""() => [...document.querySelectorAll('.modal, .modal-backdrop')]
+          .filter(el => {const st=getComputedStyle(el); return st.display !== 'none' &&
+            st.visibility !== 'hidden' && el.getBoundingClientRect().width > 0;})
+          .map(el => ({id:el.id, classes:String(el.className)}))""")
+        if overlays:
+            raise RuntimeError(f"{id}: print layout exposes hidden site dialog: {overlays}")
         out_pdf = OUT / f"{id}.pdf"
         page.pdf(path=str(out_pdf), print_background=True, format="A4",
                  margin={"top":"16mm","bottom":"16mm","left":"16mm","right":"16mm"},
