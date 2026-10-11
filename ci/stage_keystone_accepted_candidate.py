@@ -27,8 +27,9 @@ FIGURES = {
 }
 if OUT.exists():
     rmtree(OUT)
-for directory in ("chapters", "figures/generated", "figures", "sources"):
+for directory in ("chapters", "figures/generated", "figures", "sources", "assets"):
     (OUT / directory).mkdir(parents=True, exist_ok=True)
+copyfile(ROOT / "ci/assets/keystone-review.css", OUT / "assets/keystone-review.css")
 for id in CHAPTERS:
     path = ROOT / "chapters" / (id + ".md")
     if not path.exists():
