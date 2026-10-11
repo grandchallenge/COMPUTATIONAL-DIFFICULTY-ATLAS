@@ -1,0 +1,20 @@
+name: CDA keystone manuscript structure
+on:
+  pull_request:
+    paths:
+      - 'chapters/**'
+      - 'ci/validate_keystone_drafts.py'
+      - '.github/workflows/cda-keystone-manuscript-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  manuscript-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify chapter structure and mathematical delimiters
+        run: python ci/validate_keystone_drafts.py
