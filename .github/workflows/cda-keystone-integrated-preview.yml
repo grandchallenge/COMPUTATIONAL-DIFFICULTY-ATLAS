@@ -9,6 +9,8 @@ on:
       - 'preview/**'
       - 'ci/stage_keystone_integrated_preview.py'
       - 'ci/check_keystone_integrated_preview.py'
+      - 'ci/verify_persisted_wolfram_assets.py'
+      - 'tests/test_wolfram_persistence_gate.py'
       - 'mkdocs-keystone-preview.yml'
       - '.github/workflows/cda-keystone-integrated-preview.yml'
   pull_request:
@@ -36,6 +38,10 @@ jobs:
           python-version: '3.12.13'
       - name: Install pinned MkDocs renderer
         run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Test fail-closed durability gate
+        run: python -m unittest tests.test_wolfram_persistence_gate -v
+      - name: Read back six committed Wolfram sources and complete SVGs BEFORE display
+        run: python ci/verify_persisted_wolfram_assets.py --figures F2_1 F3_2 F4_3 F6_2 F3_1 F15_1 --manifest build/figure-provenance.json
       - name: Stage six exact-head manuscripts and unaccepted figures
         run: python ci/stage_keystone_integrated_preview.py
       - name: Build review-only MkDocs HTML
@@ -45,6 +51,7 @@ jobs:
       - name: Bind generated artifact to source commit
         shell: bash
         run: |
+          cp build/figure-provenance.json build/site/FIGURE_PROVENANCE.json
           printf 'checkout_commit=%s\n' "$(git rev-parse HEAD)" > build/site/SOURCE_COMMIT.txt
           printf 'workflow_run=%s\n' "$GITHUB_RUN_ID" >> build/site/SOURCE_COMMIT.txt
           printf 'authority=UNACCEPTED_EDITORIAL_PREVIEW_NOT_PUBLISHED\n' >> build/site/SOURCE_COMMIT.txt
