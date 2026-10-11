@@ -1,0 +1,31 @@
+name: CDA keystone MkDocs preview
+on:
+  pull_request:
+    paths:
+      - 'chapters/**'
+      - 'mkdocs.yml'
+      - 'ci/stage_manuscript_preview.py'
+      - 'ci/check_rendered_manuscript.py'
+      - '.github/workflows/cda-keystone-render-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mkdocs-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Install pinned MkDocs tools
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage proposed chapters
+        run: python ci/stage_manuscript_preview.py
+      - name: Build rendered preview strictly
+        run: mkdocs build --strict
+      - name: Inspect generated HTML math wrappers
+        run: python ci/check_rendered_manuscript.py
