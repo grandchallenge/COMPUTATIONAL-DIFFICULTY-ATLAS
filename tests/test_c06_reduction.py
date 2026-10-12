@@ -23,7 +23,7 @@ def sat(clauses, variables=2):
 
 def reduce_to_clique(clauses):
     if not clauses:
-        return 1, [(0, 0, 1)], {(0, 0)}
+        return 1, [(0, 0, 1)], set()
     if any(not clause for clause in clauses):
         return 2, [(0, 0, 1)], set()
     vertices = [(i,j,lit) for i,clause in enumerate(clauses)
