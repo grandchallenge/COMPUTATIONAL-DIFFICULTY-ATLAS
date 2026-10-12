@@ -1,0 +1,57 @@
+name: CDA C09 PH mathematical preview
+on:
+  pull_request:
+    paths:
+      - 'chapters/C09.md'
+      - 'tests/test_c09_ph.py'
+      - 'mkdocs-c09-preview.yml'
+      - '.github/workflows/cda-c09-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c09-proof-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Test finite quantifier alternation and epistemic source contract
+        run: python -m unittest tests.test_c09_ph -v
+      - name: Install exact math renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage nonpublic C09
+        shell: bash
+        run: |
+          mkdir -p build/c09-docs/chapters
+          cp chapters/C09.md build/c09-docs/chapters/
+          printf '# C09 Review Only\n\n**UNACCEPTED EDITORIAL MANUSCRIPT, NOT A PUBLIC RELEASE.**\n\n[Read the polynomial hierarchy candidate](chapters/C09.md)\n' > build/c09-docs/index.md
+      - name: Strict HTML mathematical build
+        run: mkdocs build --strict -f mkdocs-c09-preview.yml
+      - name: Inspect typeset source and approval boundary
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path('build/c09-site/chapters/C09/index.html').read_text()
+          index=Path('build/c09-site/index.html').read_text()
+          assert 'arithmatex' in html and 'mathjax' in html.lower()
+          assert 'PSPACE' in html and 'Exercises' in html and 'Map update' in html
+          assert 'UNACCEPTED EDITORIAL MANUSCRIPT' in index
+          print('C09 rendered MathJax and status gate PASS')
+          PY
+      - name: Preserve source lock on HTML archive
+        shell: bash
+        run: |
+          printf 'source_commit=%s\n' "$(git rev-parse HEAD)" > build/c09-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/c09-site/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c09-ph-review-html
+          path: build/c09-site/
+          retention-days: 14
+          if-no-files-found: error
