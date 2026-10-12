@@ -1,0 +1,11 @@
+site_name: Computational Difficulty Atlas — C09 review
+docs_dir: build/c09-docs
+site_dir: build/c09-site
+theme:
+  name: mkdocs
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+strict: true
