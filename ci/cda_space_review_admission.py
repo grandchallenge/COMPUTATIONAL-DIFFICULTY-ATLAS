@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tranche-003 space-chapter admission reusing the protected tranche-002 contract.
+"""Tranche-005 SPACE-chapter admission reusing the protected tranche-002 contract.
 
 This extends queue capacity *without modifying* the old six immutably returned
 jobs or adding standalone authority. PR preflight is read-only; writes occur only
@@ -23,7 +23,7 @@ def load_jobs():
         base.fail("wrong campaign")
     jobs = data.get("jobs")
     if not isinstance(jobs, list) or len(jobs) != 2:
-        base.fail("expected exactly two space-review jobs")
+        base.fail("expected exactly two SPACE-005 review jobs")
     if {(j["issue"], j["chapter"], j["assignment_id"], j["pr"]) for j in jobs} != {
         (43, "C11", "CDA-REV-C11-005", 41),
         (44, "C12", "CDA-REV-C12-005", 42),
