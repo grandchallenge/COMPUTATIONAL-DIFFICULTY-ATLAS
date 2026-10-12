@@ -1,0 +1,21 @@
+{
+  "schema": "GCL-CDA-REVIEW-ADMISSION/1",
+  "campaign": "COMPUTATIONAL-DIFFICULTY-ATLAS",
+  "authority": "effective after nonauthor-reviewed protected-main admission; reviewer logical role, no publication authority",
+  "jobs": [
+    {
+      "assignment_id": "CDA-REV-C13-006",
+      "chapter": "C13",
+      "issue": 49,
+      "pr": 47,
+      "head": "383cf123c0ece21c2662940a2b685ecab73af2dd"
+    },
+    {
+      "assignment_id": "CDA-REV-C14-006",
+      "chapter": "C14",
+      "issue": 50,
+      "pr": 48,
+      "head": "f917f6dc217101ba6f39e03b6fbf9030a0f65369"
+    }
+  ]
+}
