@@ -1,0 +1,11 @@
+site_name: Computational Difficulty Atlas — C13 review
+docs_dir: build/c13-docs
+site_dir: build/c13-site
+theme:
+  name: mkdocs
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+strict: true
