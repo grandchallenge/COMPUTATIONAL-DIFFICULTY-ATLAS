@@ -1,0 +1,55 @@
+{
+  "schema": "CDA-CORE-004-PROTECTED-ADMISSION/1",
+  "recorded_date": "2026-10-11 America/Vancouver",
+  "scope": "Four protected C06-C09 manuscripts, not figures or book publication",
+  "chapters": [
+    "C06",
+    "C07",
+    "C08",
+    "C09"
+  ],
+  "original_heads": {
+    "31": "c6c86aa100c27c5b02ab82587786e39cccc885d6",
+    "32": "f75b70f8af4f659253dba03725d67af73c9930b1",
+    "33": "3ae0f47f1027e1cef69f35f48b81e79abe4b2975",
+    "34": "0313be68831af2fab312a53a9d64ad84e1bbac8c"
+  },
+  "review_assignment_issue_ids": [
+    35,
+    36,
+    37,
+    38
+  ],
+  "return_state": "RETURNED",
+  "correction_ledger": "reviews/CDA_CORE_004_RETURN_RECONCILIATION.md",
+  "protected_admission_controller": {
+    "pr": 39,
+    "merge_sha": "4f1508d6be807a80c0ca4e3ef793a2ab3698e164",
+    "run_id": 38194667754,
+    "run_conclusion": "success"
+  },
+  "admitted_pr": 40,
+  "admitted_head": "ed08ac1f654680ecdf38ecac0582d58e86e4a0c0",
+  "protected_merge_sha": "6fdf47b6336f97f3f9ce2e6e41b9a18463b5b92e",
+  "non_author_approval": {
+    "actor": "jimsteeg",
+    "review_id": 5486070185,
+    "commit_id": "ed08ac1f654680ecdf38ecac0582d58e86e4a0c0",
+    "state": "APPROVED"
+  },
+  "checks": {
+    "c06": 38195349230,
+    "c07": 38195349221,
+    "c08": 38195349211,
+    "c09": 38195349213,
+    "ops": 38195349212,
+    "six_keystone_replay": 38195349216,
+    "all": "success"
+  },
+  "chapters_protected_admitted_total": 12,
+  "chapters_planned": 23,
+  "figures": "C06-C09 figures unproduced",
+  "tagged_pdf": "not accepted",
+  "public_html": "not authorized",
+  "whole_book": "incomplete"
+}
