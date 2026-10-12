@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - 'chapters/C09.md'
-      - 'tests/test_c09_self_reduction.py'
+      - 'tests/test_c09_ph.py'
       - 'mkdocs-c09-preview.yml'
       - '.github/workflows/cda-c09-preview.yml'
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: '3.12.13'
       - name: Test finite quantifier alternation and epistemic source contract
-        run: python -m unittest tests.test_c09_self_reduction -v
+        run: python -m unittest tests.test_c09_ph -v
       - name: Install exact math renderer
         run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
       - name: Stage nonpublic C09
@@ -51,7 +51,7 @@ jobs:
           printf 'status=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/c09-site/SOURCE_COMMIT.txt
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: cda-c09-pnp-review-html
+          name: cda-c09-ph-review-html
           path: build/c09-site/
           retention-days: 14
           if-no-files-found: error
