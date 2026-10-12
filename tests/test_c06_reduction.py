@@ -91,6 +91,25 @@ class C06MathematicalReplay(unittest.TestCase):
             k,v,edges=reduce_to_clique(clauses)
             self.assertEqual(sat(clauses),has_clique(k,v,edges))
 
+    def test_total_encoding_reduction_invalid_strings(self):
+        # This independent encoded-language adapter models the chapter's
+        # explicit validation rule; parse-invalid inputs must be rejected.
+        def map_input(encoded):
+            if not isinstance(encoded, tuple):
+                return 2, [(0, 0, 1)], set()
+            if any(not isinstance(c, tuple) for c in encoded):
+                return 2, [(0, 0, 1)], set()
+            if any(not isinstance(v, int) or v == 0 or abs(v) > 2
+                   for c in encoded for v in c):
+                return 2, [(0, 0, 1)], set()
+            return reduce_to_clique(encoded)
+        for bad in ("not a formula", [(1,)], ((0,),), ((3,),), (4,)):
+            k,vertices,edges = map_input(bad)
+            self.assertFalse(has_clique(k,vertices,edges),bad)
+        for valid in ((),((),),((1,),(-1,)),((1,2),(-1,2))):
+            k,vertices,edges = map_input(valid)
+            self.assertEqual(sat(valid),has_clique(k,vertices,edges),valid)
+
     def test_named_examples(self):
         yes = ((1,2,3),(-1,2,3),(1,-2,3))
         self.assertTrue(sat(yes,3))
