@@ -1,0 +1,53 @@
+name: CDA C07 coNP proof and math preview
+on:
+  pull_request:
+    paths:
+      - 'chapters/C07.md'
+      - 'tests/test_c07_conp.py'
+      - 'ci/stage_c07_preview.py'
+      - 'mkdocs-c07-preview.yml'
+      - '.github/workflows/cda-c07-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c07-proof-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Check complement identities and encoding distinctions
+        run: python -m unittest tests.test_c07_conp -v
+      - name: Install exact math renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage nonpublic mathematical chapter
+        run: python ci/stage_c07_preview.py
+      - name: Strict MathJax HTML render
+        run: mkdocs build --strict -f mkdocs-c07-preview.yml
+      - name: Assert generated mathematical HTML and candidate status
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path('build/c07-site/chapters/C07/index.html').read_text()
+          home=Path('build/c07-site/index.html').read_text()
+          assert 'coNP' in html and 'arithmatex' in html
+          assert 'mathjax' in html.lower() and 'coNP-complete' in html
+          assert 'UNACCEPTED editorial manuscript' in home
+          print('C07 strict mathematical HTML PASS; review not accepted')
+          PY
+      - name: Bind review preview to exact commit
+        shell: bash
+        run: |
+          printf 'source_commit=%s\n' "$(git rev-parse HEAD)" > build/c07-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_EDITIORIAL_CANDIDATE\n' >> build/c07-site/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c07-coNP-review-html
+          path: build/c07-site/
+          retention-days: 14
+          if-no-files-found: error
