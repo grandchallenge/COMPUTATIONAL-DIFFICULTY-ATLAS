@@ -1,0 +1,57 @@
+name: CDA C08 P-NP mathematical preview
+on:
+  pull_request:
+    paths:
+      - 'chapters/C08.md'
+      - 'tests/test_c08_self_reduction.py'
+      - 'mkdocs-c08-preview.yml'
+      - '.github/workflows/cda-c08-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c08-proof-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Test finite SAT self-reduction and epistemic source contract
+        run: python -m unittest tests.test_c08_self_reduction -v
+      - name: Install exact math renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage nonpublic C08
+        shell: bash
+        run: |
+          mkdir -p build/c08-docs/chapters
+          cp chapters/C08.md build/c08-docs/chapters/
+          printf '# C08 Review Only\n\n**UNACCEPTED EDITORIAL MANUSCRIPT, NOT A PUBLIC RELEASE.**\n\n[Read the P versus NP candidate](chapters/C08.md)\n' > build/c08-docs/index.md
+      - name: Strict HTML mathematical build
+        run: mkdocs build --strict -f mkdocs-c08-preview.yml
+      - name: Inspect typeset source and approval boundary
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path('build/c08-site/chapters/C08/index.html').read_text()
+          index=Path('build/c08-site/index.html').read_text()
+          assert 'arithmatex' in html and 'mathjax' in html.lower()
+          assert 'EXPTIME' in html and 'Exercises' in html and 'Map update' in html
+          assert 'UNACCEPTED EDITORIAL MANUSCRIPT' in index
+          print('C08 rendered MathJax and status gate PASS')
+          PY
+      - name: Preserve source lock on HTML archive
+        shell: bash
+        run: |
+          printf 'source_commit=%s\n' "$(git rev-parse HEAD)" > build/c08-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/c08-site/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c08-pnp-review-html
+          path: build/c08-site/
+          retention-days: 14
+          if-no-files-found: error
