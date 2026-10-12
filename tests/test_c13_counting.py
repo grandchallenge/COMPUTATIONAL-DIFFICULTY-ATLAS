@@ -51,7 +51,7 @@ class C13FiniteChecks(unittest.TestCase):
         self.assertTrue(s.startswith("# C13"))
         for required in (r"\#SAT", r"\operatorname{perm}", "parsimonious",
                          "Valiant", "## Exercises", "## Map update",
-                         "not a subclass of NP", "not yet been produced",
+                         "not a subclass of NP", "No figure has yet been produced",
                          "strictly greater than"):
             self.assertIn(required,s)
         self.assertGreater(len(s),10000)
