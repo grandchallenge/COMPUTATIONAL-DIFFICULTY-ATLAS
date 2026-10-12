@@ -72,8 +72,8 @@ class IntroExamples(unittest.TestCase):
 
     def test_c03_fenced_algorithm_has_real_markdown_delimiters(self):
         chapter = (ROOT / "chapters/C03.md").read_text(encoding="utf-8")
-        self.assertIn("```text\\nREACH(G, s, t):", chapter)
-        self.assertIn("    return NO\\n```", chapter)
+        self.assertIn("```text\nREACH(G, s, t):", chapter)
+        self.assertIn("    return NO\n```", chapter)
         self.assertNotIn("\\`\\`\\`", chapter)
         self.assertEqual(sum(line.startswith("```") for line in chapter.splitlines()), 2)
 
