@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           printf 'source_commit=%s\n' "$(git rev-parse HEAD)" > build/c07-site/SOURCE_COMMIT.txt
-          printf 'status=UNACCEPTED_EDITIORIAL_CANDIDATE\n' >> build/c07-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/c07-site/SOURCE_COMMIT.txt
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: cda-c07-coNP-review-html
