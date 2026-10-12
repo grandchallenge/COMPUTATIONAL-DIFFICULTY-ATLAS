@@ -1,0 +1,21 @@
+{
+  "schema": "GCL-CDA-REVIEW-ADMISSION/1",
+  "campaign": "COMPUTATIONAL-DIFFICULTY-ATLAS",
+  "authority": "Effective only following non-author-reviewed protected admission on main; no mathematical or publication certification",
+  "jobs": [
+    {
+      "assignment_id": "CDA-REV-C11-005",
+      "chapter": "C11",
+      "issue": 43,
+      "pr": 41,
+      "head": "3768149a4eb98caa3675e16a905227ae64a34021"
+    },
+    {
+      "assignment_id": "CDA-REV-C12-005",
+      "chapter": "C12",
+      "issue": 44,
+      "pr": 42,
+      "head": "c68b2cf99c09c8c92bc868313a7e00d241e19eab"
+    }
+  ]
+}
