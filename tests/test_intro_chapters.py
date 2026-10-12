@@ -70,6 +70,19 @@ class IntroExamples(unittest.TestCase):
             self.assertNotRegex(text, r"<(?:script|iframe|style)\b")
             self.assertFalse(any(ord(ch) < 32 and ch not in "\n\t\r" for ch in text))
 
+    def test_c03_fenced_algorithm_has_real_markdown_delimiters(self):
+        chapter = (ROOT / "chapters/C03.md").read_text(encoding="utf-8")
+        self.assertIn("```text\\nREACH(G, s, t):", chapter)
+        self.assertIn("    return NO\\n```", chapter)
+        self.assertNotIn("\\`\\`\\`", chapter)
+        self.assertEqual(sum(line.startswith("```") for line in chapter.splitlines()), 2)
+
+    def test_c02_total_decider_includes_invalid_encodings(self):
+        chapter = (ROOT / "chapters/C02.md").read_text(encoding="utf-8")
+        self.assertIn("every** binary string", chapter)
+        self.assertIn("strings that do not encode a valid instance", chapter)
+        self.assertIn("both directions", chapter)
+
     def test_promises_not_overstated(self):
         c02 = (ROOT / "chapters/C02.md").read_text()
         c03 = (ROOT / "chapters/C03.md").read_text()
