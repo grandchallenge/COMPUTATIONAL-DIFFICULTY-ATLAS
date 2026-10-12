@@ -10,7 +10,7 @@ on:
 permissions:
   contents: read
 jobs:
-  c12-qbf-review:
+  c12-time-space-review:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12.13'
-      - name: Exhaustive three-variable resource witness falsification
+      - name: Binary encoding, modular counter and hierarchy contract checks
         run: python -m unittest tests.test_c12_hierarchy -v
       - name: Install pinned MathJax-aware preview
         run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
