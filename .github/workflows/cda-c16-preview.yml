@@ -1,0 +1,58 @@
+name: CDA C16 parallel complexity review
+on:
+  pull_request:
+    paths:
+      - 'chapters/C16.md'
+      - 'tests/test_c16_parallel.py'
+      - 'mkdocs-c16-preview.yml'
+      - '.github/workflows/cda-c16-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c16-parallel-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Replay parity work/depth and NC mathematical claims
+        run: python -m unittest tests.test_c16_parallel -v
+      - name: Install exact MathJax-aware renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage review-only source
+        shell: bash
+        run: |
+          mkdir -p build/c16-docs/chapters
+          cp chapters/C16.md build/c16-docs/chapters/
+          printf '# C16 Parallel Complexity Review\n\n**UNACCEPTED EDITORIAL MANUSCRIPT; NOT PUBLISHED.**\n\n[C16 mathematical text](chapters/C16.md)\n' > build/c16-docs/index.md
+      - name: Build strict MathJax review
+        run: mkdocs build --strict -f mkdocs-c16-preview.yml
+      - name: Check probability typesetting and review status
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path("build/c16-site/chapters/C16/index.html").read_text()
+          home=Path("build/c16-site/index.html").read_text()
+          assert "arithmatex" in html and "mathjax" in html.lower()
+          assert "NC" in html and "Circuit Value" in html and "parity" in html.lower()
+          assert "Exercises" in html and "Map update" in html
+          assert "UNACCEPTED EDITORIAL MANUSCRIPT" in home
+          print("C16 finite parallel parity examples and strict HTML PASS; acceptance pending")
+          PY
+      - name: Source lock reviewer artifact
+        shell: bash
+        run: |
+          printf 'source_commit=%s\n' "$(git rev-parse HEAD)" > build/c16-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/c16-site/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c16-parallel-math-review
+          path: build/c16-site/
+          retention-days: 14
+          if-no-files-found: error
