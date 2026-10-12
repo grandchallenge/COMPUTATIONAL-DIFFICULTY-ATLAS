@@ -1,0 +1,35 @@
+{
+  "schema": "GCL-CDA-REVIEW-ADMISSION/1",
+  "campaign": "COMPUTATIONAL-DIFFICULTY-ATLAS",
+  "authority": "effective after protected merge to main; separate manuscript approval required",
+  "jobs": [
+    {
+      "assignment_id": "CDA-REV-C06-004",
+      "chapter": "C06",
+      "issue": 35,
+      "pr": 31,
+      "head": "c6c86aa100c27c5b02ab82587786e39cccc885d6"
+    },
+    {
+      "assignment_id": "CDA-REV-C07-004",
+      "chapter": "C07",
+      "issue": 36,
+      "pr": 32,
+      "head": "f75b70f8af4f659253dba03725d67af73c9930b1"
+    },
+    {
+      "assignment_id": "CDA-REV-C08-004",
+      "chapter": "C08",
+      "issue": 37,
+      "pr": 33,
+      "head": "3ae0f47f1027e1cef69f35f48b81e79abe4b2975"
+    },
+    {
+      "assignment_id": "CDA-REV-C09-004",
+      "chapter": "C09",
+      "issue": 38,
+      "pr": 34,
+      "head": "0313be68831af2fab312a53a9d64ad84e1bbac8c"
+    }
+  ]
+}
