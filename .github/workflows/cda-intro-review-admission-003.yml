@@ -1,0 +1,64 @@
+name: CDA intro review admission 003 — protected only
+on:
+  pull_request:
+    paths:
+      - 'governance/CDA_REVIEW_ADMISSION_003.json'
+      - 'ci/cda_intro_review_admission.py'
+      - 'tests/test_cda_intro_review_admission.py'
+      - '.github/workflows/cda-intro-review-admission-003.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'governance/CDA_REVIEW_ADMISSION_003.json'
+  workflow_dispatch:
+concurrency:
+  group: cda-intro-review-admission-003
+  cancel-in-progress: false
+jobs:
+  read-only-preflight:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Test two-job admission and existing protected policy
+        run: python -m unittest tests.test_cda_review_admission tests.test_cda_intro_review_admission -v
+      - name: Verify exact live issue fields and immutable PR head with no writes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m ci.cda_intro_review_admission
+  protected-activation:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Test protected admission invariants
+        run: python -m unittest tests.test_cda_review_admission tests.test_cda_intro_review_admission -v
+      - name: Full two-job immutable read-only preflight
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m ci.cda_intro_review_admission
+      - name: Project two authenticated editor jobs and exact readback
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m ci.cda_intro_review_admission --execute
