@@ -37,6 +37,38 @@ class C09QuantifierReplay(unittest.TestCase):
             count+=1
         self.assertEqual(count,16)
 
+    def test_restricted_exists_forall_cnf_collapses_to_sat(self):
+        # 1=X and 2=Y; signed literals, including empty clauses.
+        literals=(-2,-1,1,2)
+        clause_pool=[()] + [c for k in (1,2,3)
+                            for c in product(literals,repeat=k)]
+        def eval_lit(lit,x,y):
+            truth={1:x,2:y}[abs(lit)]
+            return truth if lit>0 else not truth
+        def original(cnf):
+            return any(all(all(any(eval_lit(lit,x,y) for lit in clause)
+                               for clause in cnf) for y in B) for x in B)
+        def eliminated(cnf):
+            reduced=[]
+            for clause in cnf:
+                yparts={lit for lit in clause if abs(lit)==2}
+                if any(-lit in yparts for lit in yparts):
+                    continue
+                reduced.append(tuple(lit for lit in clause if abs(lit)==1))
+            return any(all(any(eval_lit(lit,x,False) for lit in clause)
+                           for clause in reduced) for x in B)
+        checked=0
+        for cnf in product(clause_pool,repeat=2):
+            self.assertEqual(original(cnf),eliminated(cnf),cnf)
+            checked+=1
+        self.assertEqual(checked,85**2)
+
+    def test_three_block_example_dependency(self):
+        # There is a fixed first choice u=0; final z may depend on x.
+        is_true=any(all(any((not u) and (z==x) for z in B)
+                        for x in B) for u in B)
+        self.assertTrue(is_true)
+
     def test_source_claim_scope_and_math(self):
         src=(ROOT/"chapters/C09.md").read_text(encoding="utf-8")
         self.assertTrue(src.startswith("# C09"))
