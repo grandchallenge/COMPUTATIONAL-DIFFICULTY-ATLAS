@@ -32,7 +32,7 @@ jobs:
           printf '# C16 Parallel Complexity Review\n\n**UNACCEPTED EDITORIAL MANUSCRIPT; NOT PUBLISHED.**\n\n[C16 mathematical text](chapters/C16.md)\n' > build/c16-docs/index.md
       - name: Build strict MathJax review
         run: mkdocs build --strict -f mkdocs-c16-preview.yml
-      - name: Check probability typesetting and review status
+      - name: Check parallel complexity typesetting and review status
         shell: bash
         run: |
           python - <<'PY'
