@@ -1,0 +1,64 @@
+name: CDA SPACE-005 review admission — protected only
+on:
+  pull_request:
+    paths:
+      - 'governance/CDA_REVIEW_ADMISSION_005.json'
+      - 'ci/cda_space_review_admission.py'
+      - 'tests/test_cda_space_review_admission.py'
+      - '.github/workflows/cda-space-review-admission-005.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'governance/CDA_REVIEW_ADMISSION_005.json'
+  workflow_dispatch:
+concurrency:
+  group: cda-space-review-admission-005
+  cancel-in-progress: false
+jobs:
+  read-only-preflight:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Test two-job SPACE-005 admission and existing protected policy
+        run: python -m unittest tests.test_cda_review_admission tests.test_cda_space_review_admission -v
+      - name: Verify exact live issue fields and immutable PR head with no writes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m ci.cda_space_review_admission
+  protected-activation:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Test protected admission invariants
+        run: python -m unittest tests.test_cda_review_admission tests.test_cda_space_review_admission -v
+      - name: Full two-job SPACE-005 immutable read-only preflight
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m ci.cda_space_review_admission
+      - name: Project two authenticated editor jobs and exact readback
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m ci.cda_space_review_admission --execute
