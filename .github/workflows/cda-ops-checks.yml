@@ -2,26 +2,8 @@ name: CDA operational checks
 
 on:
   pull_request:
-    paths:
-      - "ci/**"
-      - "tests/**"
-      - ".github/workflows/**"
-      - "governance/DIRECT_EDITORIAL_RETURN_PROTOCOL.md"
-      - "reviews/CDA_REV_001_*.md"
-      - "reviews/CDA_REV_001_*.json"
-      - "figures/F1_1_CAPTION.md"
-      - "figures/metadata/F1_1.yaml"
   push:
     branches: [main]
-    paths:
-      - "ci/**"
-      - "tests/**"
-      - ".github/workflows/**"
-      - "governance/DIRECT_EDITORIAL_RETURN_PROTOCOL.md"
-      - "reviews/CDA_REV_001_*.md"
-      - "reviews/CDA_REV_001_*.json"
-      - "figures/F1_1_CAPTION.md"
-      - "figures/metadata/F1_1.yaml"
 
 permissions:
   contents: read
