@@ -1,0 +1,11 @@
+site_name: Computational Difficulty Atlas — C16 review
+docs_dir: build/c16-docs
+site_dir: build/c16-site
+theme:
+  name: mkdocs
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+extra_javascript:
+  - assets/mathjax-3.2.2-tex-mml-svg.js
+strict: true
