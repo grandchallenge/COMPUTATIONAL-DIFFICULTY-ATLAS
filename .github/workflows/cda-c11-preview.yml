@@ -1,0 +1,58 @@
+name: CDA C11 QBF games and PSPACE review
+on:
+  pull_request:
+    paths:
+      - 'chapters/C11.md'
+      - 'tests/test_c11_qbf.py'
+      - 'mkdocs-c11-preview.yml'
+      - '.github/workflows/cda-c11-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c11-qbf-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Exhaustive three-variable QBF truth-table falsification
+        run: python -m unittest tests.test_c11_qbf -v
+      - name: Install pinned MathJax-aware preview
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage nonpublic C11 source
+        shell: bash
+        run: |
+          mkdir -p build/c11-docs/chapters
+          cp chapters/C11.md build/c11-docs/chapters/
+          printf '# C11 Mathematical Review\n\n**UNACCEPTED MATHEMATICAL EDITORIAL CANDIDATE; NOT PUBLIC.**\n\n[Read C11](chapters/C11.md)\n' > build/c11-docs/index.md
+      - name: Strict mathematical HTML render
+        run: mkdocs build --strict -f mkdocs-c11-preview.yml
+      - name: Inspect equation formatting and scope
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path('build/c11-site/chapters/C11/index.html').read_text()
+          home=Path('build/c11-site/index.html').read_text()
+          assert 'arithmatex' in html and 'mathjax' in html.lower()
+          assert 'TQBF' in html and 'PSPACE' in html and 'Exercises' in html
+          assert 'UNACCEPTED MATHEMATICAL EDITORIAL' in home
+          assert '<pre><code' in html or '<pre class=' in html
+          print('C11 exact mathematical source and strict MkDocs review PASS')
+          PY
+      - name: Preserve exact-head archive metadata
+        shell: bash
+        run: |
+          printf 'source_commit=%s\n' "$(git rev-parse HEAD)" > build/c11-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_MATHEMATICAL_EDITORIAL\n' >> build/c11-site/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c11-qbf-math-review
+          path: build/c11-site/
+          retention-days: 14
+          if-no-files-found: error
