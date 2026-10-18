@@ -59,6 +59,14 @@ def gate_not(p, z):
 
 
 class C06MathematicalReplay(unittest.TestCase):
+    def test_section_anchors_are_css_safe(self):
+        import re
+        from pathlib import Path
+        path=Path(__file__).resolve().parents[1]/"chapters"/"C06.md"
+        headings=re.findall(r"^## (.+)$",path.read_text(encoding="utf-8"),re.M)
+        assert sum(h.startswith("Section ") for h in headings)>7
+        assert not any(re.match(r"^[0-9]",h) for h in headings)
+
     def test_gate_truth_tables(self):
         for p,q,z in product((False,True),repeat=3):
             self.assertEqual(gate_and(p,q,z), z == (p and q))

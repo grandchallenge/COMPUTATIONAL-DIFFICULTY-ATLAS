@@ -23,6 +23,14 @@ def assignments():
 
 
 class C07FiniteReplay(unittest.TestCase):
+    def test_section_anchors_are_css_safe(self):
+        import re
+        from pathlib import Path
+        path=Path(__file__).resolve().parents[1]/"chapters"/"C07.md"
+        headings=re.findall(r"^## (.+)$",path.read_text(encoding="utf-8"),re.M)
+        assert sum(h.startswith("Section ") for h in headings)>7
+        assert not any(re.match(r"^[0-9]",h) for h in headings)
+
     def test_tautology_and_not_tautology(self):
         self.assertTrue(all(psi(a,b) for a,b in assignments()))
         self.assertTrue(any(theta(a,b) for a,b in assignments()))
