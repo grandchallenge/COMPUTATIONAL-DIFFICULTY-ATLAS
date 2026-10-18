@@ -129,5 +129,17 @@ class KeystoneExampleReplay(unittest.TestCase):
         self.assertFalse(sat(1, lambda x: x[0] and not x[0]))
 
 
+
+class KeystoneNavigationRegression(unittest.TestCase):
+    def test_six_chapter_numbered_heading_ids_are_css_safe(self):
+        from pathlib import Path
+        import re
+        root=Path(__file__).resolve().parents[1]
+        for n in ("01", "04", "05", "10", "15", "20"):
+            source=(root/"chapters"/f"C{n}.md").read_text(encoding="utf-8")
+            headers=re.findall(r"^## (.+)$",source,re.M)
+            self.assertGreaterEqual(sum(h.startswith("Section ") for h in headers),6,n)
+            self.assertFalse(any(re.match(r"^[0-9]",h) for h in headers),n)
+
 if __name__ == "__main__":
     unittest.main()

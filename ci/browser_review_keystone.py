@@ -35,6 +35,8 @@ with sync_playwright() as p:
     for id in CHAPTERS:
         page = browser.new_page(viewport={"width": 1240, "height": 860},
                                 device_scale_factor=1)
+        page_errors = []
+        page.on("pageerror", lambda error: page_errors.append(str(error)))
         address = f"http://127.0.0.1:{server.server_port}/chapters/{id}/"
         page.goto(address, wait_until="load", timeout=90000)
         page.wait_for_function("!!(window.MathJax && window.MathJax.typesetPromise)",
@@ -44,6 +46,8 @@ with sync_playwright() as p:
                                timeout=90000)
         evidence = page.evaluate("""() => ({
           mathContainers: document.querySelectorAll('mjx-container').length,
+          numericHeadingIds: [...document.querySelectorAll('h2,h3')].filter(
+              h => /^[0-9]/.test(h.id)).map(h => h.id),
           totalImgs: document.querySelectorAll('img').length,
           invalidImgs: [...document.querySelectorAll('img')].filter(
               img => !img.complete || img.naturalWidth === 0).map(img => img.src),
@@ -52,6 +56,8 @@ with sync_playwright() as p:
         })""")
         if evidence["mathContainers"] < 2 or evidence["invalidImgs"]:
             raise RuntimeError(f"{id}: math images not typeset/rendered: {evidence}")
+        if evidence["numericHeadingIds"]:
+            raise RuntimeError(f"{id}: headings break MkDocs JS selectors: {evidence['numericHeadingIds']}")
         # Ensure responsive display does not create major horizontal overflow.
         if evidence["bodyWidth"] > evidence["viewportWidth"] + 24:
             raise RuntimeError(f"{id}: horizontal overflow in desktop preview: {evidence}")
@@ -90,8 +96,11 @@ with sync_playwright() as p:
         if count < 2:
             raise RuntimeError(f"{id}: suspiciously short PDF, {count} pages")
         pages.append((id, out_pdf))
+        if page_errors:
+            raise RuntimeError(f"{id}: browser JavaScript error(s): {page_errors}")
         replay.append({"chapter":id, "pages":count, "desktop":evidence,
-                       "mobile":mobile, "source_url":address})
+                       "mobile":mobile, "source_url":address,
+                       "js_errors":page_errors})
         page.close()
     browser.close()
 server.shutdown()
