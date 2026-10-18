@@ -8,6 +8,9 @@ from pathlib import Path
 import json
 from pypdf import PdfReader, PdfWriter
 from playwright.sync_api import sync_playwright
+from functools import partial
+from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+from threading import Thread
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "build/site"
@@ -16,12 +19,23 @@ OUT.mkdir(parents=True, exist_ok=True)
 CHAPTERS = ["C01", "C04", "C05", "C10", "C15", "C20"]
 pages = []
 replay = []
+
+# file:// pages have null origin, disabling the MkDocs search worker and
+# creating a different asset-loading environment from actual HTTP readers.
+# The loopback-only server supplies the exact staged site without a network
+# dependency, while the repo-pinned MathJax renderer stays self-contained.
+server = ThreadingHTTPServer(
+    ("127.0.0.1", 0),
+    partial(SimpleHTTPRequestHandler, directory=str(SITE)),
+)
+server_thread = Thread(target=server.serve_forever, daemon=True)
+server_thread.start()
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     for id in CHAPTERS:
         page = browser.new_page(viewport={"width": 1240, "height": 860},
                                 device_scale_factor=1)
-        address = (SITE / "chapters" / id / "index.html").resolve().as_uri()
+        address = f"http://127.0.0.1:{server.server_port}/chapters/{id}/"
         page.goto(address, wait_until="load", timeout=90000)
         page.wait_for_function("!!(window.MathJax && window.MathJax.typesetPromise)",
                                timeout=90000)
@@ -80,6 +94,9 @@ with sync_playwright() as p:
                        "mobile":mobile, "source_url":address})
         page.close()
     browser.close()
+server.shutdown()
+server.server_close()
+server_thread.join(timeout=5)
 
 writer = PdfWriter()
 for id, pdf in pages:
