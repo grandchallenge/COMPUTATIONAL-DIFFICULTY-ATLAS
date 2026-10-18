@@ -32,6 +32,13 @@ def reach(vertices, edges, start, target):
 
 
 class IntroExamples(unittest.TestCase):
+    def test_intro_section_anchors_css_safe(self):
+        for code in ("02", "03"):
+            path=ROOT/"chapters"/f"C{code}.md"
+            headings=re.findall(r"^## (.+)$",path.read_text(encoding="utf-8"),re.M)
+            self.assertEqual(sum(h.startswith("Section ") for h in headings),8)
+            self.assertFalse(any(re.match(r"^[0-9]",h) for h in headings))
+
     def test_binary_input_length(self):
         for k in [0, 1, 3, 12, 30]:
             self.assertEqual((1 << k).bit_length(), k + 1)
