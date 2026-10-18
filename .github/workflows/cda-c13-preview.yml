@@ -1,0 +1,58 @@
+name: CDA C13 counting PP mathematical review
+on:
+  pull_request:
+    paths:
+      - 'chapters/C13.md'
+      - 'tests/test_c13_counting.py'
+      - 'mkdocs-c13-preview.yml'
+      - '.github/workflows/cda-c13-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c13-counting-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Check finite counting and probabilistic majority examples
+        run: python -m unittest tests.test_c13_counting -v
+      - name: Install pinned mathematical renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage review-only source
+        shell: bash
+        run: |
+          mkdir -p build/c13-docs/chapters
+          cp chapters/C13.md build/c13-docs/chapters/
+          printf '# C13 Counting Complexity Review\n\n**UNACCEPTED EDITORIAL MANUSCRIPT; NOT PUBLISHED.**\n\n[C13 mathematical text](chapters/C13.md)\n' > build/c13-docs/index.md
+      - name: Build strict MathJax review
+        run: mkdocs build --strict -f mkdocs-c13-preview.yml
+      - name: Check counting math and status rendered
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path("build/c13-site/chapters/C13/index.html").read_text()
+          home=Path("build/c13-site/index.html").read_text()
+          assert "arithmatex" in html and "mathjax" in html.lower()
+          assert "permanent" in html.lower() and "Valiant" in html
+          assert "Exercises" in html and "Map update" in html
+          assert "UNACCEPTED EDITORIAL MANUSCRIPT" in home
+          print("C13 finite mathematical and strict HTML source PASS; acceptance pending")
+          PY
+      - name: Add exact source commit and review-only state
+        shell: bash
+        run: |
+          printf 'source_commit=%s\n' "$(git rev-parse HEAD)" > build/c13-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/c13-site/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c13-counting-math-review
+          path: build/c13-site/
+          retention-days: 14
+          if-no-files-found: error
