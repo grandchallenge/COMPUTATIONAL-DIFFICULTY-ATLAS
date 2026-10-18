@@ -30,6 +30,13 @@ if OUT.exists():
 for directory in ("chapters", "figures/generated", "figures", "sources", "assets"):
     (OUT / directory).mkdir(parents=True, exist_ok=True)
 copyfile(ROOT / "ci/assets/keystone-review.css", OUT / "assets/keystone-review.css")
+# Render without a third-party CDN request from the CI browser.
+from hashlib import sha256
+bundled = ROOT / "vendor/mathjax/tex-mml-svg.js"
+expected_sha = "1f17a7ed95ff4a4b27d16bf0fb5f80b915686ee8673e82983a2876ecf8cb9fae"
+assert sha256(bundled.read_bytes()).hexdigest() == expected_sha, "MathJax vendor integrity"
+copyfile(bundled, OUT / "assets/mathjax-3.2.2-tex-mml-svg.js")
+
 for id in CHAPTERS:
     path = ROOT / "chapters" / (id + ".md")
     if not path.exists():
