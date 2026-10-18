@@ -64,6 +64,16 @@ class C13FiniteChecks(unittest.TestCase):
                 accepted=paths+accepting
                 self.assertEqual(2*accepted>total, accepting>0)
 
+    def test_markdown_heading_slugs_are_safe_for_theme_navigation(self):
+        # The MkDocs default-theme navigation queries headings by CSS id.
+        # Slugs beginning with a digit (e.g. #1-count-carefully) are invalid
+        # unescaped CSS selectors, despite being valid HTML element IDs.
+        import re
+        content=(ROOT/"chapters/C13.md").read_text(encoding="utf-8")
+        headers=re.findall(r"^## (.+)$",content,re.M)
+        self.assertEqual(sum(x.startswith("Section ") for x in headers),9)
+        self.assertFalse(any(re.match(r"^[0-9]",x) for x in headers))
+
     def test_source_epistemics_and_markup(self):
         s=(ROOT/"chapters/C13.md").read_text(encoding="utf-8")
         self.assertTrue(s.startswith("# C13"))
