@@ -34,6 +34,14 @@ def self_reduce(clauses, n):
 
 
 class C08Falsification(unittest.TestCase):
+    def test_section_anchors_are_css_safe(self):
+        import re
+        from pathlib import Path
+        path=Path(__file__).resolve().parents[1]/"chapters"/"C08.md"
+        headings=re.findall(r"^## (.+)$",path.read_text(encoding="utf-8"),re.M)
+        assert sum(h.startswith("Section ") for h in headings)>7
+        assert not any(re.match(r"^[0-9]",h) for h in headings)
+
     def test_search_decision_reduction_on_all_small_cnf(self):
         lits=(-2,-1,1,2)
         pool=[clause for size in (1,2) for clause in product(lits,repeat=size)]
