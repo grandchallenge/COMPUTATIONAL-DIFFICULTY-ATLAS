@@ -1,0 +1,58 @@
+name: CDA C14 randomized mathematical review
+on:
+  pull_request:
+    paths:
+      - 'chapters/C14.md'
+      - 'tests/test_c14_randomized.py'
+      - 'mkdocs-c14-preview.yml'
+      - '.github/workflows/cda-c14-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c14-randomized-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Falsify randomized probability examples and proof contracts
+        run: python -m unittest tests.test_c14_randomized -v
+      - name: Install exact MathJax-aware renderer
+        run: python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1'
+      - name: Stage review-only source
+        shell: bash
+        run: |
+          mkdir -p build/c14-docs/chapters
+          cp chapters/C14.md build/c14-docs/chapters/
+          printf '# C14 Randomized Complexity Review\n\n**UNACCEPTED EDITORIAL MANUSCRIPT; NOT PUBLISHED.**\n\n[C14 mathematical text](chapters/C14.md)\n' > build/c14-docs/index.md
+      - name: Build strict MathJax review
+        run: mkdocs build --strict -f mkdocs-c14-preview.yml
+      - name: Check probability typesetting and review status
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path("build/c14-site/chapters/C14/index.html").read_text()
+          home=Path("build/c14-site/index.html").read_text()
+          assert "arithmatex" in html and "mathjax" in html.lower()
+          assert "ZPP" in html and "BPP" in html and "Schwartz" in html
+          assert "Exercises" in html and "Map update" in html
+          assert "UNACCEPTED EDITORIAL MANUSCRIPT" in home
+          print("C14 finite randomized examples and strict HTML PASS; acceptance pending")
+          PY
+      - name: Source lock reviewer artifact
+        shell: bash
+        run: |
+          printf 'source_commit=%s\n' "$(git rev-parse HEAD)" > build/c14-site/SOURCE_COMMIT.txt
+          printf 'status=UNACCEPTED_EDITORIAL_CANDIDATE\n' >> build/c14-site/SOURCE_COMMIT.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-c14-randomized-math-review
+          path: build/c14-site/
+          retention-days: 14
+          if-no-files-found: error
