@@ -1,0 +1,36 @@
+{
+  "contract_id": "GCL-CIR-001",
+  "version": "1.0.0",
+  "repository": "grandchallenge/COMPUTATIONAL-DIFFICULTY-ATLAS",
+  "mode": "ENFORCE_DISCOVERY_PRESERVE_EXISTING_CI",
+  "checks": [
+    {
+      "id": "cda-operational-checks",
+      "test_globs": [
+        "tests/test_*.py"
+      ]
+    }
+  ],
+  "legacy_test_paths": [
+    "tests/test_c06_reduction.py",
+    "tests/test_c07_conp.py",
+    "tests/test_c08_self_reduction.py",
+    "tests/test_c09_ph.py",
+    "tests/test_c11_qbf.py",
+    "tests/test_c12_hierarchy.py",
+    "tests/test_c13_counting.py",
+    "tests/test_c14_randomized.py",
+    "tests/test_c16_parallel.py",
+    "tests/test_cda_core_review_admission.py",
+    "tests/test_cda_direct_return_projector.py",
+    "tests/test_cda_direct_return_reconcile.py",
+    "tests/test_cda_intro_review_admission.py",
+    "tests/test_cda_probability_review_admission.py",
+    "tests/test_cda_return_replay_entrypoint.py",
+    "tests/test_cda_review_admission.py",
+    "tests/test_cda_space_review_admission.py",
+    "tests/test_intro_chapters.py",
+    "tests/test_keystone_examples.py",
+    "tests/test_wolfram_persistence_gate.py"
+  ]
+}
