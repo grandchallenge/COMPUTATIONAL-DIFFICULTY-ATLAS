@@ -1,0 +1,11 @@
+figure_id: FP17
+chapter: C17
+title: Parameter dependence changes the exponent
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP17.svg
+caption: figures/FP17_CAPTION.md
+misconceptions: 'M07,M08'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

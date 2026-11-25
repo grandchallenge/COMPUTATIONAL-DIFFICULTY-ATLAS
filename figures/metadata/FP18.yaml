@@ -1,0 +1,11 @@
+figure_id: FP18
+chapter: C18
+title: Matching lower bound and approximation
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP18.svg
+caption: figures/FP18_CAPTION.md
+misconceptions: 'M13,M17'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

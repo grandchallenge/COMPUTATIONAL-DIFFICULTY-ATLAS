@@ -1,0 +1,11 @@
+figure_id: FP14
+chapter: C14
+title: Randomness and one-sided errors
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP14.svg
+caption: figures/FP14_CAPTION.md
+misconceptions: 'M20,M07'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

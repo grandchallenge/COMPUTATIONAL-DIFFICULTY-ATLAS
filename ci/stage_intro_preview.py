@@ -12,13 +12,18 @@ for code in ("C02", "C03"):
     file = ROOT / "chapters" / f"{code}.md"
     assert file.is_file()
     copyfile(file, DEST / "chapters" / file.name)
+(DEST/"figures/generated").mkdir(parents=True,exist_ok=True)
+copyfile(ROOT/"figures/generated/FP02.svg",DEST/"figures/generated/FP02.svg")
+copyfile(ROOT/"figures/FP02_CAPTION.md",DEST/"figures/FP02_CAPTION.md")
+copyfile(ROOT/"figures/generated/FP03.svg",DEST/"figures/generated/FP03.svg")
+copyfile(ROOT/"figures/FP03_CAPTION.md",DEST/"figures/FP03_CAPTION.md")
 (DEST / "index.md").write_text(
     "# Computational Difficulty Atlas — introductory manuscript review\n\n"
     "**UNACCEPTED EDITORIAL CANDIDATES; NOT A PUBLIC RELEASE.**\n\n"
     "- [C02 — Cost models and asymptotics](chapters/C02.md)\n"
     "- [C03 — Deterministic polynomial time and P](chapters/C03.md)\n\n"
     "These two chapters connect the protected C01/C04 content but are not "
-    "yet mathematically accepted. Full Wolfram figures will be developed separately "
+    "yet mathematically accepted. Figure candidates require further review "
     "under save-before-display provenance requirements.\n",
     encoding="utf-8"
 )

@@ -1,0 +1,11 @@
+figure_id: FP09
+chapter: C09
+title: Quantifier order and dependency
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP09.svg
+caption: figures/FP09_CAPTION.md
+misconceptions: 'M12,M15'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

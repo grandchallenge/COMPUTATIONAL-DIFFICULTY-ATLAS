@@ -56,7 +56,7 @@ class C12Examples(unittest.TestCase):
                       "space-constructible","o(g(n))",
                       "complete configuration","read-only",
                       "each individual computation branch",
-                      "not accepted for publication","not yet produced"):
+                      "not accepted for publication","figures/generated/FP12.svg"):
             self.assertIn(token,s)
         headings=re.findall(r"^## (.+)$",s,re.M)
         self.assertEqual(sum(x.startswith("Section ") for x in headings),9)
@@ -68,7 +68,7 @@ class C12Examples(unittest.TestCase):
         for token in (r"\mathrm{EXPTIME}",r"\mathrm{EXPSPACE}",
                       r"\mathrm{2EXPTIME}",r"PSPACE\subsetneq EXPSPACE",
                       r"EXPTIME\subsetneq 2EXPTIME",r"APSPACE=EXPTIME",
-                      "## Exercises","## Map update","not yet produced",
+                      "## Exercises","## Map update","figures/generated/FP12.svg",
                       "strict","configurations"):
             self.assertIn(token,s)
         self.assertGreater(len(s),10000)

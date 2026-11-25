@@ -8,10 +8,13 @@ if docs.exists():
     rmtree(docs)
 (docs/"chapters").mkdir(parents=True)
 copyfile(root/"chapters/C07.md",docs/"chapters/C07.md")
+(docs/"figures/generated").mkdir(parents=True,exist_ok=True)
+copyfile(root/"figures/generated/FP07.svg",docs/"figures/generated/FP07.svg")
+copyfile(root/"figures/FP07_CAPTION.md",docs/"figures/FP07_CAPTION.md")
 (docs/"index.md").write_text(
     "# C07 — coNP editorial review\n\n"
     "**UNACCEPTED editorial manuscript: no mathematical certification or public release.**\n\n"
     "[Read C07: coNP, counterexamples and tautology](chapters/C07.md)\n\n"
-    "Figures are unproduced; none are rendered from an unsaved Wolfram output.\n",
+    "Figure candidates are persisted; none are rendered from an unsaved Wolfram output.\n",
     encoding="utf-8"
 )

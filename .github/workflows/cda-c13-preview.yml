@@ -29,6 +29,9 @@ jobs:
         run: |
           mkdir -p build/c13-docs/chapters
           cp chapters/C13.md build/c13-docs/chapters/
+          mkdir -p build/c13-docs/figures/generated
+          cp figures/generated/FP13.svg build/c13-docs/figures/generated/
+          cp figures/FP13_CAPTION.md build/c13-docs/figures/
           printf '# C13 Counting Complexity Review\n\n**UNACCEPTED EDITORIAL MANUSCRIPT; NOT PUBLISHED.**\n\n[C13 mathematical text](chapters/C13.md)\n' > build/c13-docs/index.md
       - name: Build strict MathJax review
         run: mkdocs build --strict -f mkdocs-c13-preview.yml

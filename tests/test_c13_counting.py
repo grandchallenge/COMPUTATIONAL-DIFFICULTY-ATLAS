@@ -79,7 +79,7 @@ class C13FiniteChecks(unittest.TestCase):
         self.assertTrue(s.startswith("# C13"))
         for required in (r"\#SAT", r"\operatorname{perm}", "parsimonious",
                          "Valiant", "## Exercises", "## Map update",
-                         "not a subclass of NP", "No figure has yet been produced",
+                         "not a subclass of NP", "figures/generated/FP13.svg",
                          "strictly greater than", "unique", "Lemma 3.2",
                          "Turing (oracle) counting reductions", "non-square matrices",
                          "not accepted"):

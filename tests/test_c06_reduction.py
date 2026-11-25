@@ -133,7 +133,7 @@ class C06MathematicalReplay(unittest.TestCase):
         self.assertTrue(chapter.startswith("# C06"))
         for required in ("Cook–Levin", "3SAT to CLIQUE", "NP-hard",
                          "## Exercises", "## Map update",
-                         "empty clause", "unproduced", "Figure obligation"):
+                         "empty clause", "figures/generated/FP06.svg", "Figure obligation"):
             self.assertIn(required, chapter)
         displays=sum(s.strip()=="$$" for s in chapter.splitlines())
         self.assertGreater(displays,8)

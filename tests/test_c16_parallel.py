@@ -121,7 +121,7 @@ class C16FiniteChecks(unittest.TestCase):
         for token in ("10.1145/321812.321815","10.1145/990518.990519",
                       "malformed binary codes", "implicit promise",
                       "logspace reductions", "does not supply a proof",
-                      "source", "unproduced"):
+                      "source", "figures/generated/FP16.svg"):
             self.assertIn(token,s)
         headings=re.findall(r"^## (.+)$",s,re.M)
         self.assertEqual(sum(h.startswith("Section ") for h in headings),9)
@@ -131,7 +131,7 @@ class C16FiniteChecks(unittest.TestCase):
         s=(ROOT/"chapters/C16.md").read_text(encoding="utf-8")
         self.assertTrue(s.startswith("# C16"))
         for word in ("DLOGTIME", "logspace", "Circuit Value",
-                     "## Exercises", "## Map update", "unproduced",
+                     "## Exercises", "## Map update", "figures/generated/FP16.svg",
                      "P-complete", "uniform"):
             self.assertIn(word,s)
         self.assertGreater(len(s),9500)
