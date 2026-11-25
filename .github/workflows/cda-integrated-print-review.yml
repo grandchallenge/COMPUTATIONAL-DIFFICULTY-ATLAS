@@ -1,0 +1,50 @@
+name: CDA integrated print review
+on:
+  pull_request:
+    paths:
+      - 'chapters/**'
+      - 'figures/**'
+      - 'ci/print_atlas_review.py'
+      - 'ci/stage_atlas_preview.py'
+      - 'mkdocs-atlas-preview.yml'
+      - '.github/workflows/cda-integrated-print-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tagged-print-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - name: Install pinned render dependencies
+        run: |
+          python -m pip install 'mkdocs==1.6.1' 'pymdown-extensions==10.16.1' 'playwright==1.64.0' 'pypdf==6.20.1'
+          python -m playwright install chromium
+      - name: Verify persisted Wolfram figures before display
+        run: python ci/verify_persisted_wolfram_assets.py --figures F15_1 F2_1 F3_1 F3_2 F4_3 F6_2
+      - name: Build integrated review site
+        run: |
+          python ci/stage_atlas_preview.py
+          python -m mkdocs build --strict -f mkdocs-atlas-preview.yml
+      - name: Render and audit a single tagged PDF
+        run: python ci/print_atlas_review.py
+      - name: Archive review-only PDF and structural evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-integrated-tagged-print-review
+          path: build/atlas-print-review/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Archive companion HTML with assistive MathML
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cda-integrated-html-review
+          path: build/atlas-site/
+          retention-days: 30
+          if-no-files-found: error
