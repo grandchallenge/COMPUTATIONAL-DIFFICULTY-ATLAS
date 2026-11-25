@@ -113,14 +113,29 @@ try:
             if(!el || !item.math) continue;
             const wrapper=el.parentElement;
             if(!wrapper || !wrapper.classList.contains('arithmatex')) continue;
-            wrapper.setAttribute('role','img');
-            wrapper.setAttribute('aria-label','Mathematical expression (TeX): '+item.math);
+            const svg=el.querySelector('svg');
+            if(!svg) continue;
+            const rect=svg.getBoundingClientRect();
+            const align=svg.style.verticalAlign;
+            const clone=svg.cloneNode(true);
+            clone.removeAttribute('aria-hidden');
+            clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+            clone.setAttribute('width',String(rect.width));
+            clone.setAttribute('height',String(rect.height));
+            clone.style.verticalAlign='';
+            const img=new Image();
+            img.alt='Mathematical expression (TeX): '+item.math;
+            img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(clone));
+            img.style.cssText='display:inline-block;margin:0;max-width:100%;height:auto;width:'+rect.width+'px;vertical-align:'+align;
+            el.replaceWith(img);
             count++;
           }
           return count;
         }""")
         assert tagged_math==evidence["math"],(tagged_math,evidence["math"])
         evidence["print_math_text_alternatives"]=tagged_math
+        page.evaluate("() => Promise.all([...document.images].map(i=>i.decode()))")
+        assert page.evaluate("() => [...document.images].every(i=>i.complete && i.naturalWidth>0 && i.alt.trim())")
         assert not evidence["overflow"],evidence
         page.pdf(path=pdf,prefer_css_page_size=True,print_background=True,tagged=True,outline=True)
         browser.close()
