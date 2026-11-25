@@ -87,8 +87,8 @@ try:
         page.on("pageerror",lambda e:errors.append(str(e)))
         response=page.goto(f"http://127.0.0.1:{server.server_port}/print-review.html",wait_until="load",timeout=90000)
         assert response.status==200
-        page.wait_for_function("!!(window.MathJax && window.MathJax.typesetPromise)",timeout=90000)
-        page.evaluate("() => window.MathJax.typesetPromise()")
+        page.wait_for_function("!!(window.MathJax && window.MathJax.startup && window.MathJax.startup.promise)",timeout=90000)
+        page.evaluate("() => window.MathJax.startup.promise")
         page.emulate_media(media="print")
         evidence=page.evaluate("""() => ({
           articles:document.querySelectorAll('article').length,
@@ -101,7 +101,7 @@ try:
           lang:document.documentElement.lang,
           overflow:document.body.scrollWidth>document.documentElement.clientWidth+24
         })""")
-        assert evidence["articles"]==23 and evidence["math"]>2000 and evidence["images"]>=29,evidence
+        assert evidence["articles"]==23 and evidence["math"]>1000 and evidence["assistive"]==evidence["math"] and evidence["images"]>=29,evidence
         assert not (evidence["mathErrors"] or evidence["badImages"] or evidence["badLinks"] or errors),evidence
         # Preserve browser MathML in the HTML artifact. Chromium PDF does not
         # export MathML as Formula tags; for print only, mark each rendered

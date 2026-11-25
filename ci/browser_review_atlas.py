@@ -21,8 +21,8 @@ try:
             errors=[]
             page.on("pageerror",lambda e:errors.append(str(e)))
             resp=page.goto(f"http://127.0.0.1:{server.server_port}/chapters/C{n:02}/",wait_until="load",timeout=30000)
-            page.wait_for_function("!!(window.MathJax && window.MathJax.typesetPromise)",timeout=15000)
-            page.evaluate("() => window.MathJax.typesetPromise()")
+            page.wait_for_function("!!(window.MathJax && window.MathJax.startup && window.MathJax.startup.promise)",timeout=15000)
+            page.evaluate("() => window.MathJax.startup.promise")
             info=page.evaluate("""() => ({
                 math:document.querySelectorAll('mjx-container').length,
                 mathErrors:[...document.querySelectorAll('mjx-merror,[data-mml-node=merror]')].map(x=>x.textContent),
