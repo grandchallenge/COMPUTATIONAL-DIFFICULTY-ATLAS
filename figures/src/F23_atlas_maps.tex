@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\pagestyle{empty}
+\setlength{\textwidth}{430pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\newcommand{\C}[1]{\mathsf{#1}}
+\newcommand{\head}[2]{\textbf{\large #1}\par\small #2\par\normalsize\medskip}
+\newcommand{\boxline}[1]{\par\noindent\fbox{\parbox{400pt}{\centering #1}}\par}
+\begin{document}
+\head{1. Class containment}{Solid inclusion symbols denote proved set inclusions; equality may be open.}
+\boxline{\(\C P\subseteq\C{NP}\subseteq\C{PH}\subseteq\C{PSPACE}\subseteq\C{EXPTIME}\)}
+\boxline{\(\C P\subseteq\C{BQP}\subseteq\C{PSPACE}\)}
+\boxline{\(\C P\subseteq\C{coNP}\subseteq\C{PSPACE}\)}
+\textbf{Strict endpoint:} \(\C P\ne\C{EXPTIME}\) (time hierarchy).\\
+No adjacent strictness follows from this endpoint alone.\\
+No general inclusion between \(\C{NP}\) and \(\C{BQP}\) is asserted.
+\newpage
+\head{2. Reduction relations}{Arrows translate source tasks to target tasks; the labels determine what transfers.}
+\boxline{\( A\xrightarrow{\ f\ } B,\quad x\in A\ \Longleftrightarrow\ f(x)\in B\)\\
+A solver for the target solves the source after translation.}
+\begin{tabular}{@{}p{120pt}p{280pt}@{}}
+\textbf{Edge type} & \textbf{Additional contract}\\ \hline
+Polynomial many-one & Polynomial translation time\\
+FPT many-one & Parameter-bounded output and FPT time\\
+Gap-preserving & Explicit separation of objective values\\
+Distributional & Control of pushforward probability\\
+Computable many-one & Total computable translation\\
+Turing & Adaptive oracle queries; may negate answers
+\end{tabular}
+\newpage
+\head{3. Resource coordinates}{Each claim chooses a machine model and a resource measure.}
+\begin{tabular}{@{}p{120pt}p{280pt}@{}}
+\textbf{Coordinate} & \textbf{What is charged or specified}\\ \hline
+Time / space & Operations / memory cells\\
+Work / depth & Total operations / longest dependency path\\
+Randomness & Probability of error and random choices\\
+Queries / quantum & Oracle accesses / allowed coherent gates\\
+Interaction & Verifier time, messages, prover restrictions\\
+Parameters & Dependence on \(k\) separately from input size\\
+Approximation & Feasible objective quality\\
+Distribution & Instance probability and runtime tails
+\end{tabular}
+\boxline{A bound on one coordinate is not a bound on another\\without a proved resource transfer.}
+\newpage
+\head{4. Proved separations}{Strictness is stated only where supported by a theorem.}
+\boxline{\(\C P\subsetneq\C{EXPTIME}\)\\Deterministic time hierarchy}
+\boxline{\(\mathbf 0<_T\mathbf 0'<_T\mathbf 0''<_T\cdots\)\\
+Strict Turing jumps; oracle computability, not running time}
+\boxline{A large proof-width requirement in a named proof system\\
+does not imply a lower bound on all decision algorithms.}
+These are different theorems about different relations.
+\newpage
+\head{5. Open relationships}{Question marks indicate unresolved relationships, not conjectured results.}
+\begin{tabular}{@{}p{150pt}p{250pt}@{}}
+\textbf{Equality or inclusion} & \textbf{Status}\\ \hline
+\(\C P\stackrel{?}{=}\C{NP}\) & Open; commonly conjectured unequal\\
+\(\C{NP}\stackrel{?}{=}\C{coNP}\) & Open\\
+\(\C{FPT}\stackrel{?}{=}\C{W[1]}\) & Open; commonly conjectured unequal\\
+\(\C{NP}\stackrel{?}{\subseteq}\C{BQP}\) & Not known\\
+\(\C{BQP}\stackrel{?}{\subseteq}\C{NP}\) & Not known
+\end{tabular}
+\boxline{An open inclusion is not a proved separation.}
+\newpage
+\head{6. Practical solvability}{Same correct but deliberately slow algorithm; two input distributions.}
+\begin{tabular}{@{}p{120pt}p{125pt}p{145pt}@{}}
+& Uniform bits & All-zero point mass\\ \hline
+Slow input probability & \(2^{-n}\) & \(1\)\\
+Extra delay on slow input & \(2^n\) & \(2^n\)\\
+Expected extra delay & \(1\) & \(2^n\)
+\end{tabular}
+\boxline{Worst-case extra delay: \(2^n\) in both cases.\\
+This example is an algorithmic behavior, not language hardness.}
+\newpage
+\head{7. Computability and verification}{Unbounded quantification and recognition are not finite-resource hierarchies.}
+\boxline{\(\C{DEC}=\C{RE}\cap\C{coRE}=\Delta^0_1\)\\
+\(\C{DEC}\subsetneq\C{RE}\), \(\C{DEC}\subsetneq\C{coRE}\)}
+\boxline{\(\C{HALT}\): \(\Sigma^0_1\)-complete;\quad
+\(\C{TOT}\): \(\Pi^0_2\)-complete\\under computable many-one reductions}
+\boxline{\(\C{MIP}^{*}=\C{RE}\)\\
+Bounded-gap entangled interactive verification,\\not an ordinary algorithm for deciding halting.}
+\end{document}
