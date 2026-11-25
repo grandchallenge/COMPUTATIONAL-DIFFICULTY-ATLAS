@@ -71,7 +71,7 @@ class C11TruthTests(unittest.TestCase):
                       "polynomial-size verification circuit",
                       "successive players", "No exponentially",
                       "Theorem 4.13", "10.1017/CBO9780511804090.007",
-                      "Sipser", "not a full proof", "No such figure has been produced"):
+                      "Sipser", "not a full proof", "figures/generated/FP11.svg"):
             self.assertIn(token,s)
         headers=re.findall(r"^## (.+)$",s,re.M)
         self.assertEqual(sum(x.startswith("Section ") for x in headers),9)
