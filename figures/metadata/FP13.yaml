@@ -1,0 +1,11 @@
+figure_id: FP13
+chapter: C13
+title: Existence, counting and majority
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP13.svg
+caption: figures/FP13_CAPTION.md
+misconceptions: 'M13,M18'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

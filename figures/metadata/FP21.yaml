@@ -1,0 +1,11 @@
+figure_id: FP21
+chapter: C21
+title: Computable translators versus oracle access
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP21.svg
+caption: figures/FP21_CAPTION.md
+misconceptions: 'M09,M11,M18'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

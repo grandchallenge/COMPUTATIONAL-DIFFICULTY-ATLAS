@@ -1,0 +1,11 @@
+figure_id: FP12
+chapter: C12
+title: An exponential execution with small space
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP12.svg
+caption: figures/FP12_CAPTION.md
+misconceptions: 'M08,M19'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

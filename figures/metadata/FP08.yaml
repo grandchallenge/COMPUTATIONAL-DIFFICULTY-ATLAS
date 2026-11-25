@@ -1,0 +1,11 @@
+figure_id: FP08
+chapter: C08
+title: A conditional search algorithm
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP08.svg
+caption: figures/FP08_CAPTION.md
+misconceptions: 'M05,M16'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

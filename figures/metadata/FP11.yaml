@@ -1,0 +1,11 @@
+figure_id: FP11
+chapter: C11
+title: Winning responses in a quantified game
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP11.svg
+caption: figures/FP11_CAPTION.md
+misconceptions: 'M12,M13,M19'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]

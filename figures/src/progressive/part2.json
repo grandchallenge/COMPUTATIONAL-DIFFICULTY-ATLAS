@@ -1,0 +1,58 @@
+[
+  {
+    "n": "13",
+    "title": "Existence, counting and majority",
+    "mis": "M13,M18",
+    "cap": "The formula a or b has three satisfying assignments out of four. The chapter's bipartite matrix has exactly three perfect matchings, whereas its determinant is negative one.",
+    "tex": "\\(\\begin{array}{c|cccc}\n(a,b)&00&01&10&11\\\\\\hline\na\\lor b&0&1&1&1\n\\end{array}\\)\\par\nExists? YES. Count? 3. Strict majority? YES (\\(3>2\\)).\\par\n\\(\\displaystyle A=\\begin{pmatrix}1&1&0\\\\1&1&1\\\\0&1&1\\end{pmatrix}\\qquad\n\\begin{array}{l}\n\\text{permitted permutations:}\\\\\n(1,2,3),(1,3,2),(2,1,3)\n\\end{array}\\)\\par\n\\(\\operatorname{perm}(A)=3,\\quad\\det(A)=-1.\\)\\par\nThe matrix is the edge-incidence description of the bipartite graph;\neach listed permutation selects one 1 per row and column."
+  },
+  {
+    "n": "14",
+    "title": "Randomness and one-sided errors",
+    "mis": "M20,M07",
+    "cap": "Acceptance ranges for RP, coRP and BPP; exact evaluations of t(t-1) modulo seven on four inputs. Two zero values produce a one-half miss probability.",
+    "tex": "\\(\\begin{array}{c|cc}\n&\\text{NO acceptance}&\\text{YES acceptance}\\\\ \\hline\nRP&0&[1/2,1]\\\\\ncoRP&[0,1/2]&1\\\\\nBPP&[0,1/3]&[2/3,1]\n\\end{array}\\)\\par\n\\(\\begin{array}{c|rrrr}\nt&0&1&2&3\\\\\\hline\nt(t-1)\\pmod 7&0&0&2&6\n\\end{array}\\)\\par\nUniform trial: probability of missing the nonzero polynomial \\(=1/2\\).\\par\nIndependent \\(r\\) trials: miss probability \\(2^{-r}\\) for this example.\nThis is error probability, not expected runtime."
+  },
+  {
+    "n": "16",
+    "title": "Same parity, different dependency depth",
+    "mis": "M19,M20",
+    "cap": "Eight-bit parity uses seven XOR gates in both a chain and a balanced tree. Sequential depth is seven; balanced depth is three.",
+    "tex": "Sequential chain:\\par\n\\(\\bigl((((((b_1\\oplus b_2)\\oplus b_3)\\oplus b_4)\n\\oplus b_5)\\oplus b_6)\\oplus b_7\\bigr)\\oplus b_8\\)\\par\n\\(W=7,\\ D=7\\).\\par\nBalanced dependency tree:\\par\n\\(\\begin{array}{cccc}\nb_1\\oplus b_2&b_3\\oplus b_4&b_5\\oplus b_6&b_7\\oplus b_8\\\\\n\\multicolumn{2}{c}{\\searrow\\quad\\swarrow}&\n\\multicolumn{2}{c}{\\searrow\\quad\\swarrow}\\\\\n\\multicolumn{2}{c}{u_1\\oplus u_2}&\n\\multicolumn{2}{c}{u_3\\oplus u_4}\\\\\n\\multicolumn{4}{c}{\\searrow\\qquad\\swarrow}\\\\\n\\multicolumn{4}{c}{v_1\\oplus v_2}\n\\end{array}\\)\\par\n\\(W=7,\\ D=3\\). Rows represent rounds, not measured wall time."
+  },
+  {
+    "n": "17",
+    "title": "Parameter dependence changes the exponent",
+    "mis": "M07,M08",
+    "cap": "Comparison of example upper bounds 2^k n squared and n^k for several input sizes and parameter values. For fixed k, the first exponent remains two.",
+    "tex": "\\(\\begin{array}{rr|rr}\nn&k&2^k n^2&n^k\\\\\\hline\n16&2&1024&256\\\\\n16&4&4096&65536\\\\\n64&2&16384&4096\\\\\n64&4&65536&16777216\n\\end{array}\\)\\par\n\\(2^k n^2:\\) fixed exponent in \\(n\\), parameter factor \\(2^k\\).\\par\n\\(n^k:\\) exponent depends on \\(k\\).\\par\nThese are example upper bounds, not measured times or lower bounds.\nFPT does not mean uniformly faster for every finite \\(n,k\\)."
+  },
+  {
+    "n": "18",
+    "title": "Matching lower bound and approximation",
+    "mis": "M13,M17",
+    "cap": "A maximal matching M provides lower bound |M|; its endpoints give a cover of cost twice |M|. A star attains ratio two.",
+    "tex": "\\(\\boxed{|M|\\ \\le\\ \\mathrm{OPT}\\ \\le\\ |S|=2|M|}\\)\\par\n\\(\\begin{array}{ccc}\n &c&\\\\\n\\swarrow&\\downarrow&\\searrow\\\\\na&b&d\n\\end{array}\\)\\par\nStar example: edges \\(ca,cb,cd\\). Choose \\(M=\\{ca\\}\\).\\par\nEndpoint cover \\(S=\\{c,a\\}\\) has size 2;\noptimum \\(\\{c\\}\\) has size 1.\\par\nA matching lower bound is valid because disjoint edges require\ndistinct covering vertices. No maximum matching is needed."
+  },
+  {
+    "n": "19",
+    "title": "Probability mass is not runtime contribution",
+    "mis": "M04,M14",
+    "cap": "One input has exponential extra delay. Uniform distribution gives it probability 2^-n and expected extra delay one; a point mass gives exponential expectation.",
+    "tex": "\\(\\begin{array}{l|cc}\n&\\text{uniform}&\\text{point mass}\\\\\\hline\n\\Pr(\\text{slow input})&2^{-n}&1\\\\\n\\text{extra delay}&2^n&2^n\\\\\n\\text{expected extra delay}&1&2^n\n\\end{array}\\)\\par\n\\(\\mathbb{E}[\\text{extra delay}]\n=\\Pr(\\text{slow input})\\cdot 2^n\\).\\par\nThe worst-case delay is unchanged. The distribution changes the expectation.\nThis deliberately slow algorithm decides an easy language."
+  },
+  {
+    "n": "21",
+    "title": "Computable translators versus oracle access",
+    "mis": "M09,M11,M18",
+    "cap": "HALT and ACCEPT are mutually many-one reducible; complement HALT cannot many-one reduce to HALT but is Turing equivalent by one query and negation.",
+    "tex": "\\(\\mathrm{HALT}\\ \\underset{\\le_m}{\\overset{\\le_m}{\\rightleftarrows}}\\ \\mathrm{ACCEPT}\\)\\par\nThe translators produce finite wrapper code; they do not run the\nunbounded simulation.\\par\n\\(\\overline{\\mathrm{HALT}}\\not\\le_m\\mathrm{HALT}\\)\\par\nOtherwise recognizability of HALT would transfer to its complement.\\par\n\\(\\overline{\\mathrm{HALT}}\\le_T\\mathrm{HALT}\\), and\n\\(\\mathrm{HALT}\\le_T\\overline{\\mathrm{HALT}}\\).\\par\nOne oracle membership query followed by negation suffices.\nThis is not an implementable halting decider."
+  },
+  {
+    "n": "22",
+    "title": "Bounded and unbounded quantifiers",
+    "mis": "M09,M15,M16",
+    "cap": "NP certificates have a polynomial bound on length; halting uses an unbounded time witness; totality quantifies over all inputs and then some finite halting time.",
+    "tex": "\\(\\begin{array}{l|l}\nNP&\\exists w,\\ |w|\\le p(|x|): R(x,w)\\\\\n\\Sigma^0_1\\text{ example}&\\exists t:\\ H(e,x,t)\\\\\n\\Pi^0_2\\text{ example}&\\forall x\\,\\exists t:\\ H(e,x,t)\n\\end{array}\\)\\par\nIn NP, \\(R\\) is polynomial-time decidable.\nFor the halting predicate \\(H\\), \\(t\\) ranges over all naturals.\\par\n\\(\\mathbf 0<_T\\mathbf 0'<_T\\mathbf 0''<_T\\cdots\\)\\par\nStrict oracle jumps measure computability, not time.\nThe arithmetical hierarchy is not the polynomial hierarchy."
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "n": "02",
+    "title": "Growth in abstract steps",
+    "mis": "M07,M08",
+    "cap": "Exact values of n, n squared, and two to the n at selected input lengths; exponential versus polynomial growth, not clock time.",
+    "tex": "\\(\\begin{array}{r|r|r|r}\nn& n&n^2&2^n\\\\ \\hline\n4&4&16&16\\\\\n8&8&64&256\\\\\n12&12&144&4096\\\\\n16&16&256&65536\\\\\n20&20&400&1048576\n\\end{array}\\)\\par\\medskip\nOn a base-two log scale: \\(\\log_2(n^2)=2\\log_2 n\\), \\(\\log_2(2^n)=n\\).\\par\n\\(\\begin{array}{r|rrrr}\nn&4&8&16&32\\\\ \\hline\n\\log_2(n^2)&4&6&8&10\\\\\n\\log_2(2^n)&4&8&16&32\n\\end{array}\\)\n\\par These are exact step-count functions, not universal lower bounds."
+  },
+  {
+    "n": "03",
+    "title": "Reachability by breadth-first layers",
+    "mis": "M07,M13",
+    "cap": "The directed graph a to b to c to d and a to e. BFS layers from a are {a}, {b,e}, {c}, {d}; from e only e is reached.",
+    "tex": "\\(\\begin{array}{ccccccc}\na&\\longrightarrow& b&\\longrightarrow& c&\\longrightarrow&d\\\\\n\\downarrow&&&&&&\\\\[-2pt]\ne&&&&&&\n\\end{array}\\)\\par\\medskip\n\\(\\begin{array}{c|cccc}\n\\text{distance from }a&0&1&2&3\\\\ \\hline\n\\text{frontier}&\\{a\\}&\\{b,e\\}&\\{c\\}&\\{d\\}\n\\end{array}\\)\\par\nStart at \\(e\\): no outgoing edge. Reachability \\(e\\to a\\) is false.\\par\nThe BFS core processes each vertex once and scans its outgoing edges."
+  },
+  {
+    "n": "06",
+    "title": "A clause-occurrence clique witness",
+    "mis": "M02,M11,M18",
+    "cap": "Three clause rows contain distinct literal occurrences. The compatibility table records every cross-clause edge, and the three c occurrences form a witness clique.",
+    "tex": "\\(\\Phi=(a\\lor b\\lor c)\\land(\\neg a\\lor b\\lor c)\n\\land(a\\lor\\neg b\\lor c)\\)\\par\n\\(\\begin{array}{c|ccc}\nC_1&a_1&b_1&\\boxed{c_1}\\\\\nC_2&\\neg a_2&b_2&\\boxed{c_2}\\\\\nC_3&a_3&\\neg b_3&\\boxed{c_3}\n\\end{array}\\)\\par\nRows are clauses; columns are occurrence positions. Join every pair in\ndifferent rows except complementary literals.\\par\n\\(\\begin{array}{c|c}\n\\text{row pair}&\\text{missing cross-row edges}\\\\\\hline\n1,2&(a_1,\\neg a_2)\\\\\n1,3&(b_1,\\neg b_3)\\\\\n2,3&(\\neg a_2,a_3),(b_2,\\neg b_3)\n\\end{array}\\)\\par\n\\(\\boxed{c_1\\longleftrightarrow c_2\\longleftrightarrow c_3\n\\longleftrightarrow c_1}\\)\\quad witness triangle.\n\\par No same-row edge exists. All other cross-row pairs are edges."
+  },
+  {
+    "n": "07",
+    "title": "Witnesses for SAT and non-tautology",
+    "mis": "M16,M13",
+    "cap": "The same formula is true when b is one and false when both bits are zero. One witness proves SAT membership; another refutes TAUT membership. No separation is claimed.",
+    "tex": "\\(\\theta=(a\\lor b)\\land(\\neg a\\lor b)\\)\\par\n\\(\\begin{array}{c|c|l}\n(a,b)&\\theta&\\text{meaning}\\\\\\hline\n(0,1)&1&\\text{witness for SAT}\\\\\n(0,0)&0&\\text{witness for non-TAUT}\n\\end{array}\\)\\par\\medskip\n\\(\\boxed{\\exists w:\\theta(w)=1}\\qquad\n\\boxed{\\exists w:\\theta(w)=0}\\)\\par\nSAT and non-TAUT have existential certificates; TAUT asks for\n\\(\\forall w:\\theta(w)=1\\).\\par\n\\(P\\subseteq NP\\cap coNP\\); equality questions are unresolved."
+  },
+  {
+    "n": "08",
+    "title": "A conditional search algorithm",
+    "mis": "M05,M16",
+    "cap": "A hypothetical SAT decider selects a feasible positive or negative literal at each step. The class inclusion chain only identifies P versus EXPTIME as a proved strict endpoint.",
+    "tex": "Assume a polynomial-time SAT decider \\(D\\) and a satisfiable formula \\(F\\).\\par\n\\(\\begin{array}{c}\nD(F\\land x_i)\\\\\n\\swarrow\\quad\\quad\\searrow\\\\\n\\text{YES}\\qquad\\qquad \\text{NO}\\\\\nF\\gets F\\land x_i\\quad F\\gets F\\land\\neg x_i\\\\\n\\downarrow\\qquad\\qquad\\downarrow\\\\\n\\multicolumn{1}{c}{\\text{continue with a satisfiable restricted formula}}\n\\end{array}\\)\\par\nOne choice per distinct variable yields a satisfying witness.\\par\n\\(P\\subseteq NP\\subseteq PH\\subseteq PSPACE\\subseteq EXPTIME\\).\\par\n\\(P\\ne EXPTIME\\) is proved; \\(P=NP\\) is open."
+  },
+  {
+    "n": "09",
+    "title": "Quantifier order and dependency",
+    "mis": "M12,M15",
+    "cap": "For equality of two bits, choosing x before all y fails, while responding with x equal to y succeeds. The polynomial hierarchy uses bounded quantifier blocks.",
+    "tex": "\\(\\begin{array}{c|cc}\nx=y&y=0&y=1\\\\\\hline\nx=0&1&0\\\\\nx=1&0&1\n\\end{array}\\)\\par\n\\(\\exists x\\,\\forall y\\ (x=y)\\): no row is all ones; false.\\par\n\\(\\forall y\\,\\exists x\\ (x=y)\\): every column has a one; true.\\par\nThe choice \\(x=y\\) depends on the previously chosen \\(y\\).\\par\n\\(\\Sigma_0^P=\\Pi_0^P=P,\\quad\\Sigma_1^P=NP,\\quad\\Pi_1^P=coNP.\\)\\par\nEach bounded-alternation level lies in PH; strictness not asserted."
+  },
+  {
+    "n": "11",
+    "title": "Winning responses in a quantified game",
+    "mis": "M12,M13,M19",
+    "cap": "For all x there exists y with x=y, universal AND branches choose x and existential OR branches choose y=x. Depth-first evaluation reuses the current path.",
+    "tex": "\\(\\forall x\\,\\exists y\\ (x=y)\\)\\par\n\\(\\begin{array}{c}\n\\text{AND: choose }x\\\\\n\\swarrow\\quad\\quad\\searrow\\\\\nx=0\\qquad x=1\\\\\n\\text{OR}\\qquad\\text{OR}\\\\\n\\swarrow\\ \\searrow\\quad\\swarrow\\ \\searrow\\\\\n\\boxed{1}\\ \\ 0\\qquad 0\\ \\ \\boxed{1}\\\\[-1pt]\ny=0\\quad y=1\\quad y=0\\quad y=1\n\\end{array}\\)\\par\nBoxes mark the winning responses, one per universal branch.\\par\nA depth-first decider retains only the current path and control state,\nnot the entire strategy tree. Printing a strategy is another task."
+  },
+  {
+    "n": "12",
+    "title": "An exponential execution with small space",
+    "mis": "M08,M19",
+    "cap": "Three-bit counter cycles through eight states and returns to zero. General k-bit counter uses k bits for 2^k increments. The output itself is trivial.",
+    "tex": "\\(\\begin{array}{cccc}\n000&\\to001&\\to010&\\to011\\\\\n&&&\\downarrow\\\\\n111&\\leftarrow110&\\leftarrow101&\\leftarrow100\\\\\n\\downarrow&&&\\\\\n000&&&\n\\end{array}\\)\\par\nEight increments modulo \\(2^3\\), three counter bits.\\par\nGeneral \\(k\\): \\(2^k\\) increments, \\(k\\) counter bits plus control.\\par\nThe returned value is always zero; no intrinsic time lower bound follows.\\par\n\\(P\\subseteq PSPACE\\subseteq EXPTIME,\\quad P\\ne EXPTIME.\\)"
+  }
+]

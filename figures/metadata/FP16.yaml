@@ -1,0 +1,11 @@
+figure_id: FP16
+chapter: C16
+title: Same parity, different dependency depth
+status: latex_svg_candidate_unreviewed
+source: figures/src/progressive/part*.json
+generator: LaTeX and dvisvgm
+generation_command: python figures/src/progressive/generate.py
+output_artifact: figures/generated/FP16.svg
+caption: figures/FP16_CAPTION.md
+misconceptions: 'M19,M20'
+review_required: [mathematical, pedagogical, final_width_typography, accessibility, reproducible_export]
