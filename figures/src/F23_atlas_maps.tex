@@ -6,7 +6,7 @@
 \setlength{\parskip}{7pt}
 \newcommand{\C}[1]{\mathsf{#1}}
 \newcommand{\head}[2]{\textbf{\large #1}\par\small #2\par\normalsize\medskip}
-\newcommand{\boxline}[1]{\fbox{\parbox{400pt}{\centering #1}}}
+\newcommand{\boxline}[1]{\par\noindent\fbox{\parbox{400pt}{\centering #1}}\par}
 \begin{document}
 \head{1. Class containment}{Solid inclusion symbols denote proved set inclusions; equality may be open.}
 \boxline{\(\C P\subseteq\C{NP}\subseteq\C{PH}\subseteq\C{PSPACE}\subseteq\C{EXPTIME}\)}

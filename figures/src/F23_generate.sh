@@ -14,6 +14,7 @@ for n in range(1,8):
     p=tmp/f"F23_{n}.svg"
     r=ET.parse(p).getroot()
     assert r.tag.endswith("}svg") and "viewBox" in r.attrib
+    assert float(r.attrib["viewBox"].split()[2]) < 450, "diagram exceeds intended width"
     assert any(e.tag.endswith("}path") for e in r.iter())
     assert not any(e.tag.endswith("}image") for e in r.iter())
     dest=root/"figures/generated"/p.name
