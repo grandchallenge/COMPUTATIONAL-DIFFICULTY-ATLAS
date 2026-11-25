@@ -1,0 +1,9 @@
+{
+  "contract_id":"GCL-CIR-001",
+  "version":"1.0.0",
+  "component_id":"atlas_completion",
+  "owner":"CDA integrated manuscript and mathematical regressions",
+  "paths":{"exact":["tests/test_atlas_completion.py","mkdocs-atlas-preview.yml"],"prefixes":[],"test_prefixes":[]},
+  "depends_on":[],
+  "checks":["cda-operational-checks"]
+}

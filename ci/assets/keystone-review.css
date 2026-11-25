@@ -86,3 +86,13 @@ main mjx-container, article mjx-container, .col-md-9 mjx-container {
     visibility: hidden !important;
   }
 }
+
+/* The integrated title and chapter menu must not widen the mobile viewport. */
+@media (max-width: 991px) {
+  .navbar .navbar-brand {
+    max-width: calc(100% - 68px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

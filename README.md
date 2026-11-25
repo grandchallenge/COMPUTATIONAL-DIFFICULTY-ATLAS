@@ -1,6 +1,6 @@
 # A Mathematical Atlas of Computational Difficulty
 
-Grand Challenge Labs (GCL) pedagogical monograph. **12 of the planned 23 chapters are protected-admitted as reviewed manuscripts.** The complete book is not yet written, illustrated, certified for accessibility, or publicly released.
+Grand Challenge Labs (GCL) pedagogical monograph. **12 of 23 chapters have explicit protected admission records; all 23 manuscripts are present in this integrated editorial candidate.** The complete book is not yet fully illustrated, certified for accessibility, or publicly released.
 
 The governing priorities are mathematical correctness, pedagogical clarity and faithfully renderable mathematical notation. Exact Wolfram figure source and complete vector exports must be committed, validated and read back **before** display.
 
@@ -36,9 +36,16 @@ Additional admitted resource/decidability keystones:
 
 The six-keystone preview renderer uses strict MkDocs, MathJax, Chromium layout replay, and a review-only PDF. The correction programme additionally tests exact mathematical examples and markup in C02–C09. **CI success is not equivalent to final figure approval, accessibility tagging or public publication authorization.**
 
-## Remaining manuscript chapters
+## Integrated editorial candidate
 
-C11 and C12 are drafted as **unadmitted** [PR #41](https://github.com/grandchallenge/COMPUTATIONAL-DIFFICULTY-ATLAS/pull/41) and [PR #42](https://github.com/grandchallenge/COMPUTATIONAL-DIFFICULTY-ATLAS/pull/42). Their critical reviews are staged as issues #43/#44; the separate protected controller is [PR #45](https://github.com/grandchallenge/COMPUTATIONAL-DIFFICULTY-ATLAS/pull/45). The next missing chapters are C13–C14, C16–C19 and C21–C23.
+This candidate includes all 23 manuscripts. Twelve chapters have explicit admission records listed above. Five additional manuscripts (C11–C14, C16) were merged as reviewed correction successors in PRs #54–#57 and #61; their final chapter admission receipts must be reconciled. Six new chapters (C17–C19, C21–C23) are editorial candidates, not independently certified or approved for publication.
+
+Build the complete review edition locally:
+
+    python ci/stage_atlas_preview.py
+    python -m mkdocs build --strict -f mkdocs-atlas-preview.yml
+
+The repository-pinned MathJax assets support offline rendering. Browser replay is separate from the strict build; final figures, tagged PDF and release acceptance remain pending.
 
 - [All 23 chapters and prerequisite structure](architecture/CHAPTER_DEPENDENCY_GRAPH.md)
 - [Five recurring pedagogical anchor problems](architecture/ANCHOR_PROBLEM_TRAJECTORIES.md)
