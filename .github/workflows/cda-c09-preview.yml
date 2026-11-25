@@ -29,6 +29,9 @@ jobs:
         run: |
           mkdir -p build/c09-docs/chapters
           cp chapters/C09.md build/c09-docs/chapters/
+          mkdir -p build/c09-docs/figures/generated
+          cp figures/generated/FP09.svg build/c09-docs/figures/generated/
+          cp figures/FP09_CAPTION.md build/c09-docs/figures/
           printf '# C09 Review Only\n\n**UNACCEPTED EDITORIAL MANUSCRIPT, NOT A PUBLIC RELEASE.**\n\n[Read the polynomial hierarchy candidate](chapters/C09.md)\n' > build/c09-docs/index.md
       - name: Strict HTML mathematical build
         run: mkdocs build --strict -f mkdocs-c09-preview.yml

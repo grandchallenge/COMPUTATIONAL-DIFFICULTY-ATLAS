@@ -29,6 +29,9 @@ jobs:
         run: |
           mkdir -p build/c16-docs/chapters
           cp chapters/C16.md build/c16-docs/chapters/
+          mkdir -p build/c16-docs/figures/generated
+          cp figures/generated/FP16.svg build/c16-docs/figures/generated/
+          cp figures/FP16_CAPTION.md build/c16-docs/figures/
           mkdir -p build/c16-docs/assets
           sha256sum vendor/mathjax/tex-mml-svg.js | grep -F 1f17a7ed95ff4a4b27d16bf0fb5f80b915686ee8673e82983a2876ecf8cb9fae
           cp vendor/mathjax/tex-mml-svg.js build/c16-docs/assets/mathjax-3.2.2-tex-mml-svg.js

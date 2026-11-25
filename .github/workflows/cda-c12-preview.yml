@@ -29,6 +29,9 @@ jobs:
         run: |
           mkdir -p build/c12-docs/chapters
           cp chapters/C12.md build/c12-docs/chapters/
+          mkdir -p build/c12-docs/figures/generated
+          cp figures/generated/FP12.svg build/c12-docs/figures/generated/
+          cp figures/FP12_CAPTION.md build/c12-docs/figures/
           printf '# C12 Mathematical Review\n\n**UNACCEPTED MATHEMATICAL EDITORIAL CANDIDATE; NOT PUBLIC.**\n\n[Read C12](chapters/C12.md)\n' > build/c12-docs/index.md
       - name: Strict mathematical HTML render
         run: mkdocs build --strict -f mkdocs-c12-preview.yml
