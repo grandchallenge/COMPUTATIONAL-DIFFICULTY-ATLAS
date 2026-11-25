@@ -1,0 +1,13 @@
+site_name: A Mathematical Atlas of Computational Difficulty — integrated review
+docs_dir: build/atlas-docs
+site_dir: build/atlas-site
+theme:
+  name: mkdocs
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+extra_javascript:
+  - assets/mathjax-3.2.2-tex-mml-svg.js
+extra_css:
+  - assets/keystone-review.css
+strict: true
